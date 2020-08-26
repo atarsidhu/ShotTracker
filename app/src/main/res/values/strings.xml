@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ShotTracker</string>
+
+    <!--  Main Activity-->
+    <string name="startTracker">Start Distance Tracker</string>
+    <string name="stopTracker">Stop Distance Tracker</string>
 </resources>
