@@ -1,32 +1,36 @@
 package com.example.shottracker;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
-import android.provider.Settings;
+import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+import com.google.android.material.tabs.TabLayout;
 
-public class MainActivity extends AppCompatActivity {
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
-    private Button btnStartStop;
-    private TextView tvCoordinates;
-    private LocationManager locationManager;
-    private LocationListener locationListener;
-    private double startingLatitude = 0.0;
-    private double startingLongitude = 0.0;
-    private double endingLatitude = 0.0;
-    private double endingLongitude = 0.0;
+
+public class MainActivity extends AppCompatActivity implements TrackShotFragment.OnFragmentInteractionListener, ViewShotsFragment.OnFragmentInteractionListener{
+
+
+    private Toolbar toolbar;
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
+    private TrackShotFragment trackShotFragment;
+    private ViewShotsFragment viewShotsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,55 +38,59 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 100);
 
-        btnStartStop = findViewById(R.id.btnStartStop);
-        tvCoordinates = findViewById(R.id.tvCoordinates);
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        viewPager = findViewById(R.id.view_pager);
+        tabLayout = findViewById(R.id.tab_layout);
 
-        btnStartStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                GPSTracker gpsTracker = new GPSTracker(getApplicationContext());
-                Location location = gpsTracker.getLocation();
+        trackShotFragment = new TrackShotFragment();
+        viewShotsFragment = new ViewShotsFragment();
 
-                if(location != null){
-                    if(btnStartStop.getText().equals("Start Distance Tracker")) {
-                        startingLatitude = location.getLatitude();
-                        startingLongitude = location.getLongitude();
-                        btnStartStop.setText(R.string.stopTracker);
-                    } else{
-                        endingLatitude = location.getLatitude();
-                        endingLongitude = location.getLongitude();
-                        btnStartStop.setText(R.string.startTracker);
-                    }
+        tabLayout.setupWithViewPager(viewPager);
 
-                    if(startingLatitude != 0.0 && endingLongitude != 0.0) {
-                        double yards = calculateDistance (startingLongitude, startingLatitude, endingLongitude, endingLatitude);
-                        tvCoordinates.setText("Distance: " + yards);
-                    }
-                }
-            }
-        });
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), 0);
+        viewPagerAdapter.addFragment(trackShotFragment, "Track Shot");
+        viewPagerAdapter.addFragment(viewShotsFragment, "View Shots");
+        viewPager.setAdapter(viewPagerAdapter);
+        //tabLayout.getTabAt(0).setIcon(R.drawable.ic_ruler);
+        //tabLayout.getTabAt(1).setIcon(R.drawable.ic_chart);
+
     }
 
-    private double calculateDistance(double startingLongitude, double startingLatitude, double endingLongitude, double endingLatitude){
-        //Convert Earths Radius from km to yards
-        double earthRadius = 6173;
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
 
-        double diffLat = degreesToRadians(endingLatitude - startingLatitude);
-        double diffLong = degreesToRadians(endingLongitude - startingLongitude);
+        private List<Fragment> fragmentList = new ArrayList<>();
+        private List<String> fragmentTitle = new ArrayList<>();
 
-        startingLatitude = degreesToRadians(startingLatitude);
-        endingLatitude = degreesToRadians(endingLatitude);
+        public ViewPagerAdapter(FragmentManager supportFragmentManager, int behaviour) {
+            super(supportFragmentManager, behaviour);
+        }
 
-        double temp = Math.sin(diffLat/2) * Math.sin(diffLat/2) +
-                Math.sin(diffLong/2) * Math.sin(diffLong/2) * Math.cos(startingLatitude) * Math.cos(endingLatitude);
+        public void addFragment(Fragment fragment, String title){
+            fragmentList.add(fragment);
+            fragmentTitle.add(title);
+        }
 
-        double temp2 = 2 * Math.atan2(Math.sqrt(temp), Math.sqrt(1 - temp));
+        @NonNull
+        @Override
+        public Fragment getItem(int position) {
+            return fragmentList.get(position);
+        }
 
-        //Convert to yards and return
-        return (earthRadius * 1093.61) * temp2;
+        @Override
+        public int getCount() {
+            return fragmentList.size();
+        }
+
+        @Nullable
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentTitle.get(position);
+        }
     }
 
-    private double degreesToRadians(double degrees){
-        return degrees * (Math.PI / 180);
+    @Override
+    public void onFragmentInteraction(Uri uri){
+
     }
 }
