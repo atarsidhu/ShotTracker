@@ -1,13 +1,32 @@
 <resources>
     <string name="app_name">ShotTracker</string>
 
-    <!--  Main Activity-->
+    <!--  TrackShot -->
     <string name="startTracker">Start Distance Tracker</string>
     <string name="stopTracker">Stop Distance Tracker</string>
+    <string name="saveShot">Save Shot</string>
     <string name="distance">Distance</string>
     <string name="trackShot">Track Shot</string>
     <string name="viewShots">View Shots</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
+    <string-array name="clubs">
+        <item>Driver</item>
+        <item>3-Wood</item>
+        <item>Hybrid</item>
+        <item>4-Iron</item>
+        <item>5-Iron</item>
+        <item>6-Iron</item>
+        <item>7-Iron</item>
+        <item>8-Iron</item>
+        <item>9-Iron</item>
+        <item>PW</item>
+    </string-array>
+
+    <string name="fade">Fade</string>
+    <string name="straight">Straight</string>
+    <string name="draw">Draw</string>
+
+    <string name="notes">Notes</string>
+    <string name="notesHint">e.g. course, hole, wind direction, slope etc.</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

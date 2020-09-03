@@ -11,15 +11,16 @@ public class Shot {
 
     private String club, ballFlight, notes;
     double distance;
-    private HashMap<String, ArrayList<Shot>> setOfShots;
+    private HashMap<String, ArrayList<Shot>> setOfShots = new HashMap<>();
 
     public Shot(String club, double distance, String ballFlight, String notes){
         this.club = club;
         this.ballFlight = ballFlight;
         this.distance = distance;
         this.notes = notes;
-        setOfShots = new HashMap<>();
     }
+
+    public Shot(){}
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void addShot(String club, Shot shot){
@@ -55,5 +56,9 @@ public class Shot {
 
     public String getNotes() {
         return notes;
+    }
+
+    public String toString(){
+        return getClub() + " " + getDistance() + " " + getBallFlight() + " " + getNotes();
     }
 }

@@ -1,74 +1,40 @@
 package com.example.shottracker;
 
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.*;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.fragment.app.FragmentTransaction;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link TrackShotFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link TrackShotFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class TrackShotFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class TrackShotFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private Button btnStartStop;
+    private Button btnSaveShot;
     private TextView tvCoordinates;
     private TextView tvDistance;
+    private EditText tvNotes;
     private double startingLatitude = 0.0;
     private double startingLongitude = 0.0;
     private double endingLatitude = 0.0;
     private double endingLongitude = 0.0;
-
-    private OnFragmentInteractionListener mListener;
+    private Spinner spinner;
+    private RadioGroup radioGroup;
+    private RadioButton radioButton;
+    private String club;
+    private double yards;
+    private String ballFlight;
+    Shot shot;
 
     public TrackShotFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TrackShotFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static TrackShotFragment newInstance(String param1, String param2) {
-        TrackShotFragment fragment = new TrackShotFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -76,8 +42,17 @@ public class TrackShotFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_track_shot, container, false);
         btnStartStop = view.findViewById(R.id.btnStartStop);
+        btnSaveShot = view.findViewById(R.id.btnSaveShot);
         tvCoordinates = view.findViewById(R.id.tvCoordinates);
+        tvNotes = view.findViewById(R.id.tvNotes);
         tvDistance = view.findViewById(R.id.tvDistance);
+        spinner = view.findViewById(R.id.spinner_clubs);
+        radioGroup = view.findViewById(R.id.radioGroup);
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.clubs, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+        spinner.setOnItemSelectedListener(this);
 
         btnStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +60,18 @@ public class TrackShotFragment extends Fragment {
                 getAndSetGPSLocation();
             }
         });
-        // Inflate the layout for this fragment
+
+        btnSaveShot.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View v) {
+                shot = new Shot(club, yards, ballFlight, tvNotes.getText().toString());
+                shot.addShot(club, shot);
+                //((MainActivity)getActivity()).selectFragment(1);
+
+            }
+        });
+
         return view;
     }
     private void getAndSetGPSLocation(){
@@ -108,7 +94,7 @@ public class TrackShotFragment extends Fragment {
             }
 
             if(endingLatitude != 0.0 && endingLongitude != 0.0) {
-                double yards = calculateDistance (startingLongitude, startingLatitude, endingLongitude, endingLatitude);
+                yards = calculateDistance (startingLongitude, startingLatitude, endingLongitude, endingLatitude);
                 //double yards = calculateDistance (49.2827, -123.1207, 51.5074, -0.1278); van and london coordinates
                 tvDistance.setText(String.format("%.1f yards", yards));
             }
@@ -132,42 +118,25 @@ public class TrackShotFragment extends Fragment {
         //Convert to yards and return
         return earthRadius * 1093.613 * c;
     }
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+
+    private void checkBallFlight(View view){
+        //Check which radiobutton is selected
+        int radioID = radioGroup.getCheckedRadioButtonId();
+        radioButton = view.findViewById(radioID);
+        ballFlight = radioButton.toString();
     }
 
     @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        club = parent.getItemAtPosition(position).toString();
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
 }

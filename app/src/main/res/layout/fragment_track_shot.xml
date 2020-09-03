@@ -8,6 +8,47 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
 
+    <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.35000002"
+            app:layout_constraintHorizontal_bias="0.85">
+
+        <RadioButton
+                android:id="@+id/rbFade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fade"
+                android:onClick="checkBallFlight"/>
+        <RadioButton
+                android:id="@+id/rbStraight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/straight"
+                android:checked="true"
+                android:onClick="checkBallFlight"/>
+        <RadioButton
+                android:id="@+id/rbDraw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/draw"
+                android:onClick="checkBallFlight"/>
+
+
+    </RadioGroup>
+
+    <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/spinner_clubs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.05"
+            app:layout_constraintVertical_bias="0.36"/>
+
     <Button
             android:text="@string/startTracker"
             android:layout_width="wrap_content"
@@ -27,7 +68,29 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvDistance" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toTopOf="@+id/btnStartStop"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.25"/>
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.25"
+            android:textSize="36sp" android:textStyle="bold" android:text="0 yards"/>
+    <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvNotes" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" android:hint="@string/notesHint"
+            app:layout_constraintVertical_bias="0.58000004"/>
+    <TextView
+            android:text="@string/notes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvNotesTitle" app:layout_constraintStart_toStartOf="@+id/tvNotes"
+            app:layout_constraintEnd_toEndOf="@+id/tvNotes" app:layout_constraintBottom_toTopOf="@+id/tvNotes"
+            app:layout_constraintHorizontal_bias="0.01" android:textSize="24sp" android:textStyle="bold"/>
+    <Button
+            android:text="@string/saveShot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btnSaveShot" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnStartStop" app:layout_constraintVertical_bias="0.050000012"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

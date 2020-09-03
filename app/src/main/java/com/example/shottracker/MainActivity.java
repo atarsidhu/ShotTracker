@@ -23,8 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class MainActivity extends AppCompatActivity implements TrackShotFragment.OnFragmentInteractionListener, ViewShotsFragment.OnFragmentInteractionListener{
-
+public class MainActivity extends AppCompatActivity implements
+        TrackShotFragment.OnFragmentInteractionListener,
+        ViewShotsFragment.OnFragmentInteractionListener{
 
     private Toolbar toolbar;
     private ViewPager viewPager;
@@ -54,7 +55,10 @@ public class MainActivity extends AppCompatActivity implements TrackShotFragment
         viewPager.setAdapter(viewPagerAdapter);
         //tabLayout.getTabAt(0).setIcon(R.drawable.ic_ruler);
         //tabLayout.getTabAt(1).setIcon(R.drawable.ic_chart);
+    }
 
+    public void selectFragment(int position){
+        viewPager.setCurrentItem(position, true);
     }
 
     private class ViewPagerAdapter extends FragmentPagerAdapter {
