@@ -1,7 +1,5 @@
 package com.example.shottracker;
 
-import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -12,14 +10,12 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.fragment.app.FragmentTransaction;
+
 
 public class TrackShotFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
-    private Button btnStartStop;
-    private Button btnSaveShot;
-    private TextView tvCoordinates;
-    private TextView tvDistance;
+    private Button btnStartStop, btnSaveShot;
+    private TextView tvCoordinates, tvDistance;
     private EditText tvNotes;
     private double startingLatitude = 0.0;
     private double startingLongitude = 0.0;
@@ -28,10 +24,9 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     private Spinner spinner;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
-    private String club;
+    private String club, ballFlight;
     private double yards;
-    private String ballFlight;
-    Shot shot;
+    ShotDatabase shotDatabase = ShotDatabase.getInstance();
 
     public TrackShotFragment() {
         // Required empty public constructor
@@ -65,15 +60,15 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                shot = new Shot(club, yards, ballFlight, tvNotes.getText().toString());
-                shot.addShot(club, shot);
-                //((MainActivity)getActivity()).selectFragment(1);
-
+                //((MainActivity)getActivity()).selectFragment(1); // Switch tab to View Shots
+                ShotDatabase.addShot(club, new Shot(yards, ballFlight, tvNotes.getText().toString()));
+                ShotDatabase.getValue(club);
             }
         });
 
         return view;
     }
+
     private void getAndSetGPSLocation(){
         GPSTracker gpsTracker = new GPSTracker(getContext());
         Location location = gpsTracker.getLocation();
