@@ -25,6 +25,8 @@
     <string name="fade">Fade</string>
     <string name="straight">Straight</string>
     <string name="draw">Draw</string>
+    <string name="slice">Slice</string>
+    <string name="hook">Hook</string>
 
     <string name="notes">Notes</string>
     <string name="notesHint">e.g. course, hole, wind direction, slope etc.</string>

@@ -24,7 +24,8 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     private Spinner spinner;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
-    private String club, ballFlight;
+    private String club;
+    private String ballFlight;
     private double yards;
     ShotDatabase shotDatabase = ShotDatabase.getInstance();
 
@@ -63,6 +64,29 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                 //((MainActivity)getActivity()).selectFragment(1); // Switch tab to View Shots
                 ShotDatabase.addShot(club, new Shot(yards, ballFlight, tvNotes.getText().toString()));
                 ShotDatabase.getValue(club);
+            }
+        });
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch(checkedId){
+                    case R.id.rbDraw:
+                        ballFlight = "Draw";
+                        break;
+                    case R.id.rbFade:
+                        ballFlight = "Fade";
+                        break;
+                    case R.id.rbStraight:
+                        ballFlight = "Straight";
+                        break;
+                    case R.id.rbHook:
+                        ballFlight = "Hook";
+                        break;
+                    case R.id.rbSlice:
+                        ballFlight = "Slice";
+                        break;
+                }
             }
         });
 
@@ -114,12 +138,12 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         return earthRadius * 1093.613 * c;
     }
 
-    private void checkBallFlight(View view){
+/*    private String onRadioButtonClicked(View view){
         //Check which radiobutton is selected
         int radioID = radioGroup.getCheckedRadioButtonId();
         radioButton = view.findViewById(radioID);
-        ballFlight = radioButton.toString();
-    }
+        return radioButton.toString();
+    }*/
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

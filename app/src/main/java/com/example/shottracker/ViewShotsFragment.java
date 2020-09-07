@@ -49,6 +49,8 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
 
         if(ShotDatabase.getValue(club) != null)
             tvShowShot.setText(ShotDatabase.getValue(club).toString());
+        else
+            tvShowShot.setText("No " + club + " shots saved");
     }
 
     @Override
