@@ -8,6 +8,7 @@
     <string name="distance">Distance</string>
     <string name="trackShot">Track Shot</string>
     <string name="viewShots">View Shots</string>
+    <string name="selectClub">Select Club</string>
 
     <string-array name="clubs">
         <item>Driver</item>

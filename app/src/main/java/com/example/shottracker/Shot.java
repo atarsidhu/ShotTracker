@@ -1,9 +1,10 @@
 package com.example.shottracker;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Shot {
+public class Shot implements Serializable {
 
     private String ballFlight, notes;
     double distance;

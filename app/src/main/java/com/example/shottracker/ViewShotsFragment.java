@@ -13,6 +13,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSelectedListener{
@@ -47,10 +50,33 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         club = parent.getItemAtPosition(position).toString();
 
-        if(ShotDatabase.getValue(club) != null)
-            tvShowShot.setText(ShotDatabase.getValue(club).toString());
+        if(ShotDatabase.getValue(club) != null && loadShots(club) != null)
+            //tvShowShot.setText(ShotDatabase.getValue(club).toString());
+            tvShowShot.setText(loadShots(club).toString());
+            //tvShowShot.setText(ShotDatabase.loadShots(club).toString());
         else
             tvShowShot.setText("No " + club + " shots saved");
+    }
+
+    private ArrayList<Shot> loadShots(String key){
+        ArrayList<Shot> temp = new ArrayList<>();
+
+        File file = new File(getContext().getFilesDir() + "/savedShots");
+        try {
+            FileInputStream f = new FileInputStream(file);
+            ObjectInputStream o = new ObjectInputStream(f);
+            HashMap<String, ArrayList<Shot>> fileObj2 = (HashMap<String, ArrayList<Shot>>) o.readObject();
+            o.close();
+            return fileObj2.get(key);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return temp;
     }
 
     @Override

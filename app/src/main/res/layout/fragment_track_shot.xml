@@ -69,7 +69,8 @@
             android:layout_height="wrap_content"
             android:id="@+id/tvCoordinates" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@+id/btnStartStop"/>
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@+id/btnStartStop"
+            app:layout_constraintVertical_bias="0.75"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

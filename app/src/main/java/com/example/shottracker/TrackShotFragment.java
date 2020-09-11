@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.*;
+
 
 public class TrackShotFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
@@ -26,7 +28,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     private RadioButton radioButton;
     private String club;
     private String ballFlight;
-    private double yards;
+    private double yards, yards2;
     ShotDatabase shotDatabase = ShotDatabase.getInstance();
 
     public TrackShotFragment() {
@@ -63,7 +65,19 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
             public void onClick(View v) {
                 //((MainActivity)getActivity()).selectFragment(1); // Switch tab to View Shots
                 ShotDatabase.addShot(club, new Shot(yards, ballFlight, tvNotes.getText().toString()));
-                ShotDatabase.getValue(club);
+
+                File file = new File("savedShots");
+                try {
+                    FileOutputStream fos = new FileOutputStream(new File(getContext().getFilesDir() + "/savedShots"));
+                    //FileOutputStream f = new FileOutputStream(file);
+                    ObjectOutputStream o = new ObjectOutputStream(fos);
+                    o.writeObject(ShotDatabase.getMap());
+                    o.close();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -113,8 +127,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
             }
 
             if(endingLatitude != 0.0 && endingLongitude != 0.0) {
-                yards = calculateDistance (startingLongitude, startingLatitude, endingLongitude, endingLatitude);
-                //double yards = calculateDistance (49.2827, -123.1207, 51.5074, -0.1278); van and london coordinates
+                yards = calculateDistance(startingLatitude, startingLongitude, endingLatitude, endingLongitude);
                 tvDistance.setText(String.format("%.1f yards", yards));
             }
         }
@@ -137,13 +150,6 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         //Convert to yards and return
         return earthRadius * 1093.613 * c;
     }
-
-/*    private String onRadioButtonClicked(View view){
-        //Check which radiobutton is selected
-        int radioID = radioGroup.getCheckedRadioButtonId();
-        radioButton = view.findViewById(radioID);
-        return radioButton.toString();
-    }*/
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
