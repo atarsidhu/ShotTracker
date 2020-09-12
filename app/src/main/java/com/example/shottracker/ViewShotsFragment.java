@@ -1,12 +1,10 @@
 package com.example.shottracker;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,16 +13,24 @@ import android.view.ViewGroup;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
+//TODO: When new shot is added to the already selected club on the spinner, the new shot is not shown.
+// The user must choose a different club on the spinner, then return to the club in which the new shot is associated with.
 
 public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
     private TextView tvShowShot;
     private Spinner spinnerClubs;
     private String club;
+    private Button btnDelete;
+    private boolean deleted;
+    private boolean onlyGettingClubsUsed;
     TrackShotFragment trackShotFragment = new TrackShotFragment();
     ShotDatabase shotDatabase = ShotDatabase.getInstance();
+    File dir;
+    File file;
 
     public ViewShotsFragment() {
         // Required empty public constructor
@@ -36,6 +42,9 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         View view = inflater.inflate(R.layout.fragment_view_shots, container, false);
         tvShowShot = view.findViewById(R.id.tvShowShot);
         spinnerClubs = view.findViewById(R.id.spinner_clubs_graph);
+        btnDelete = view.findViewById(R.id.btnDelete);
+        dir = getContext().getFilesDir();
+        file = new File(dir, "savedShots.txt");
 
         //Spinner configurations
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.clubs, android.R.layout.simple_spinner_item);
@@ -43,24 +52,42 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         spinnerClubs.setAdapter(adapter);
         spinnerClubs.setOnItemSelectedListener(this);
 
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteData();
+            }
+        });
+
         return view;
+    }
+
+    private void deleteData() {
+        deleted = file.delete();
+        /*File file = new File(getContext().getFilesDir().toString());
+        deleted = file.delete();*/
+        //ShotDatabase.deleteAllShots();
+        tvShowShot.setText("No " + club + " shots saved");
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         club = parent.getItemAtPosition(position).toString();
 
-        if(ShotDatabase.getValue(club) != null && loadShots(club) != null)
-            //tvShowShot.setText(ShotDatabase.getValue(club).toString());
-            tvShowShot.setText(loadShots(club).toString());
-            //tvShowShot.setText(ShotDatabase.loadShots(club).toString());
+        //String clubsUsed = ShotDatabase.getMap().keySet().toString();
+        onlyGettingClubsUsed = true;
+        String clubsUsed = readFromFile(getContext());
+        onlyGettingClubsUsed = false;
+
+        if(clubsUsed.contains(club))
+            tvShowShot.setText(readFromFile(getContext()));
         else
             tvShowShot.setText("No " + club + " shots saved");
     }
 
     private ArrayList<Shot> loadShots(String key){
         ArrayList<Shot> temp = new ArrayList<>();
-
+        ArrayList<Object> list = new ArrayList<>();
         File file = new File(getContext().getFilesDir() + "/savedShots");
         try {
             FileInputStream f = new FileInputStream(file);
@@ -77,6 +104,46 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         }
 
         return temp;
+    }
+
+    private String readFromFile(Context context) {
+        String ret = "";
+
+        try {
+            InputStream inputStream = context.openFileInput("savedShots.txt");
+
+            if ( inputStream != null ) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String receiveString = "";
+                StringBuilder stringBuilder = new StringBuilder();
+                StringBuilder previouslyUsedClubs = new StringBuilder();
+
+                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                    if(onlyGettingClubsUsed) {
+                        String[] split = receiveString.split(" ");
+                        if(!previouslyUsedClubs.toString().contains(split[0].substring(1)))
+                            previouslyUsedClubs.append(split[0].substring(1)).append(" ");
+                    } else{
+                        if(receiveString.contains(club))
+                            stringBuilder.append("\n").append(receiveString);
+                    }
+                }
+
+                if(onlyGettingClubsUsed)
+                    return previouslyUsedClubs.toString();
+
+                inputStream.close();
+                ret = stringBuilder.toString();
+            }
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return ret;
     }
 
     @Override
