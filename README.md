@@ -1,5 +1,5 @@
 # ShotTracker
-## A java application that keeps track of your golf shots!
+### A Java application that keeps track of your golf shots!
 This app gives the user the ability to save their golf shots with data including: 
 * Club used
 * Shot distance
