@@ -29,11 +29,10 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     private RadioButton radioButton;
     private String club;
     private String ballFlight;
-    private double yards, yards2;
+    private double yards;
     ShotDatabase shotDatabase = ShotDatabase.getInstance();
     private String PATH_TO_DATA;
     private File savedShotsFile;
-    private File clubsUsedFile;
 
     public TrackShotFragment() {
         // Required empty public constructor
@@ -74,7 +73,6 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                 ShotDatabase.addShot(club, new Shot(club, yards, ballFlight, tvNotes.getText().toString()));
                 Toast.makeText(getContext(), "Shot Saved!", Toast.LENGTH_SHORT).show();
                 try {
-                    //saveShotToFile();
                     saveShotToFileAsString();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -121,33 +119,16 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                 e.printStackTrace();
             }
          }
-
-        /*} else{
-            tvCoordinates.setText("File not empty");
-            *//*FileOutputStream fos = new FileOutputStream(file, true);
-            DataOutputStream write = new DataOutputStream(fos);
-            for(ArrayList s: ShotDatabase.getMap().values()){
-                write.writeUTF(s.toString());
-            }
-            write.close();*//*
-
-            OutputStreamWriter file_writer = new OutputStreamWriter(new FileOutputStream(file,true));
-            BufferedWriter buffered_writer = new BufferedWriter(file_writer);
-            buffered_writer.write(ShotDatabase.getMap());
-            buffered_writer.close();
-        }*/
     }
 
-    // WRITE AS A STRING TO A FILE, CAN APPEND EASILY. RETRIEVE STRINGS (MAY HAVE TO RE-ASSIGN THEM TO EACH VARIABLE (0.0 TO DIST ETC.)
-    // MAY HAVE TO PUT STRING AS VARIABLE IN SHOT CLASS TO IDENTIFY WHICH CLUB HIT THE SHOT. THEN ASSIGN THAT STRING VALUE TO THE KEY FOR THE HASHMAP
     private void saveShotToFileAsString() throws IOException {
         if(savedShotsFile.length() == 0) {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput("savedShots.txt", Context.MODE_PRIVATE));
-            outputStreamWriter.write(ShotDatabase.getValue(club).toString());
+            outputStreamWriter.write(ShotDatabase.getLastShot(club).toString());
             outputStreamWriter.close();
         } else{
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput("savedShots.txt", Context.MODE_APPEND));
-            outputStreamWriter.append("\n" + ShotDatabase.getValue(club).toString());
+            outputStreamWriter.append("\n" + ShotDatabase.getLastShot(club));
             outputStreamWriter.close();
         }
     }

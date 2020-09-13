@@ -18,6 +18,8 @@ import java.util.HashMap;
 
 //TODO: When new shot is added to the already selected club on the spinner, the new shot is not shown.
 // The user must choose a different club on the spinner, then return to the club in which the new shot is associated with.
+//TODO: Shots are not saved properly! Previous shot is appending with previous AND new shot. When app is closed, only newly saved shots are read
+// however, previously saved shots are displayed once before the newly saved shot is displayed.
 
 public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
@@ -64,9 +66,6 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
 
     private void deleteData() {
         deleted = file.delete();
-        /*File file = new File(getContext().getFilesDir().toString());
-        deleted = file.delete();*/
-        //ShotDatabase.deleteAllShots();
         tvShowShot.setText("No " + club + " shots saved");
     }
 
@@ -107,26 +106,26 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     }
 
     private String readFromFile(Context context) {
-        String ret = "";
+        String shotsSavedFromFile = "";
 
         try {
             InputStream inputStream = context.openFileInput("savedShots.txt");
 
-            if ( inputStream != null ) {
+            if (inputStream != null) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String receiveString = "";
-                StringBuilder stringBuilder = new StringBuilder();
+                String shotReadFromFile;
+                StringBuilder stringBuilderShotsRead = new StringBuilder();
                 StringBuilder previouslyUsedClubs = new StringBuilder();
 
-                while ( (receiveString = bufferedReader.readLine()) != null ) {
+                while ((shotReadFromFile = bufferedReader.readLine()) != null) {
                     if(onlyGettingClubsUsed) {
-                        String[] split = receiveString.split(" ");
-                        if(!previouslyUsedClubs.toString().contains(split[0].substring(1)))
-                            previouslyUsedClubs.append(split[0].substring(1)).append(" ");
+                        String[] split = shotReadFromFile.split(" ");
+                        if(!previouslyUsedClubs.toString().contains(split[0]))
+                            previouslyUsedClubs.append(split[0]).append(" ");
                     } else{
-                        if(receiveString.contains(club))
-                            stringBuilder.append("\n").append(receiveString);
+                        if(shotReadFromFile.contains(club))
+                            stringBuilderShotsRead.append("\n").append(shotReadFromFile);
                     }
                 }
 
@@ -134,7 +133,7 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
                     return previouslyUsedClubs.toString();
 
                 inputStream.close();
-                ret = stringBuilder.toString();
+                shotsSavedFromFile = stringBuilderShotsRead.toString();
             }
         }
         catch (FileNotFoundException e) {
@@ -143,7 +142,7 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
             e.printStackTrace();
         }
 
-        return ret;
+        return shotsSavedFromFile;
     }
 
     @Override

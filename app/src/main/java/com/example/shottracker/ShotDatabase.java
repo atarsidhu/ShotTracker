@@ -35,7 +35,16 @@ public class ShotDatabase {
         ArrayList<Shot> temp = new ArrayList<>();
 
         if(!shots.isEmpty())
-                return shots.get(key);
+            return shots.get(key);
+
+        return temp;
+    }
+
+    protected static Shot getLastShot(String key){
+        Shot temp = new Shot();
+
+        if(!shots.get(key).isEmpty())
+            return shots.get(key).get(shots.get(key).size() - 1);
 
         return temp;
     }
