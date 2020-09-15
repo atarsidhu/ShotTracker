@@ -36,6 +36,6 @@ public class Shot implements Serializable {
     }
 
     public String toString(){
-        return getClub() + " " + getDistance() + " " + getBallFlight() + " " + getNotes();
+        return club + " " + String.format("%.1f yards", distance) + " " + ballFlight + " " + notes;
     }
 }

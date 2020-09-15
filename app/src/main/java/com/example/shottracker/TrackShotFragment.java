@@ -26,13 +26,13 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     private double endingLongitude = 0.0;
     private Spinner spinner;
     private RadioGroup radioGroup;
-    private RadioButton radioButton;
     private String club;
     private String ballFlight;
     private double yards;
     ShotDatabase shotDatabase = ShotDatabase.getInstance();
     private String PATH_TO_DATA;
     private File savedShotsFile;
+    ViewShotsFragment viewShotsFragment;
 
     public TrackShotFragment() {
         // Required empty public constructor
@@ -55,6 +55,8 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
+        viewShotsFragment = new ViewShotsFragment();
+
         PATH_TO_DATA = getContext().getFilesDir() + "/savedShots.txt";
         savedShotsFile = new File(PATH_TO_DATA);
 
@@ -72,6 +74,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                 //((MainActivity)getActivity()).selectFragment(1); // Switch tab to View Shots
                 ShotDatabase.addShot(club, new Shot(club, yards, ballFlight, tvNotes.getText().toString()));
                 Toast.makeText(getContext(), "Shot Saved!", Toast.LENGTH_SHORT).show();
+
                 try {
                     saveShotToFileAsString();
                 } catch (IOException e) {
@@ -130,6 +133,16 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput("savedShots.txt", Context.MODE_APPEND));
             outputStreamWriter.append("\n" + ShotDatabase.getLastShot(club));
             outputStreamWriter.close();
+
+            /*Bundle bundle = new Bundle();
+            bundle.putString("setSpinner", club); // Put anything what you want
+
+            viewShotsFragment.setArguments(bundle);
+
+            getFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.content, viewShotsFragment)
+                    .commit();*/
         }
     }
 

@@ -18,8 +18,7 @@ import java.util.HashMap;
 
 //TODO: When new shot is added to the already selected club on the spinner, the new shot is not shown.
 // The user must choose a different club on the spinner, then return to the club in which the new shot is associated with.
-//TODO: Shots are not saved properly! Previous shot is appending with previous AND new shot. When app is closed, only newly saved shots are read
-// however, previously saved shots are displayed once before the newly saved shot is displayed.
+//TODO: Implement graph first, the try and solve that ^.
 
 public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
@@ -73,7 +72,6 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         club = parent.getItemAtPosition(position).toString();
 
-        //String clubsUsed = ShotDatabase.getMap().keySet().toString();
         onlyGettingClubsUsed = true;
         String clubsUsed = readFromFile(getContext());
         onlyGettingClubsUsed = false;
@@ -105,7 +103,7 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         return temp;
     }
 
-    private String readFromFile(Context context) {
+    public String readFromFile(Context context) {
         String shotsSavedFromFile = "";
 
         try {

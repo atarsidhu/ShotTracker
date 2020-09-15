@@ -11,6 +11,7 @@
     <string name="selectClub">Select Club</string>
 
     <string-array name="clubs">
+        <item>Select Club:</item>
         <item>Driver</item>
         <item>3-Wood</item>
         <item>Hybrid</item>
