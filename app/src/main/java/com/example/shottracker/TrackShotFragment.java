@@ -109,21 +109,6 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         return view;
     }
 
-    private void saveShotToFile() throws IOException {
-        if(savedShotsFile.length() == 0) {
-            try {
-                FileOutputStream fos = new FileOutputStream(savedShotsFile, true);
-                ObjectOutputStream o = new ObjectOutputStream(fos);
-                o.writeObject(ShotDatabase.getMap());
-                o.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-         }
-    }
-
     private void saveShotToFileAsString() throws IOException {
         if(savedShotsFile.length() == 0) {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput("savedShots.txt", Context.MODE_PRIVATE));

@@ -82,27 +82,6 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
             tvShowShot.setText("No " + club + " shots saved");
     }
 
-    private ArrayList<Shot> loadShots(String key){
-        ArrayList<Shot> temp = new ArrayList<>();
-        ArrayList<Object> list = new ArrayList<>();
-        File file = new File(getContext().getFilesDir() + "/savedShots");
-        try {
-            FileInputStream f = new FileInputStream(file);
-            ObjectInputStream o = new ObjectInputStream(f);
-            HashMap<String, ArrayList<Shot>> fileObj2 = (HashMap<String, ArrayList<Shot>>) o.readObject();
-            o.close();
-            return fileObj2.get(key);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        return temp;
-    }
-
     public String readFromFile(Context context) {
         String shotsSavedFromFile = "";
 
