@@ -1,14 +1,11 @@
 package com.example.shottracker;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Shot implements Serializable {
 
     private String club, ballFlight, notes;
-    double distance;
-    private HashMap<String, ArrayList<Shot>> setOfShots = new HashMap<>();
+    private double distance;
 
     public Shot(String club, double distance, String ballFlight, String notes){
         this.club = club;

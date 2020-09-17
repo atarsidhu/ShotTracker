@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ShotTracker</string>
 
-    <!--  TrackShot -->
+    <!--  Track Shot -->
     <string name="startTracker">Start Distance Tracker</string>
     <string name="stopTracker">Stop Distance Tracker</string>
     <string name="saveShot">Save Shot</string>
@@ -32,5 +32,8 @@
 
     <string name="notes">Notes</string>
     <string name="notesHint">e.g. course, hole, wind direction, slope etc.</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- View Shot -->
+    <string name="delete">Delete All Shots</string>
+    <string name="noShotsSaved">No %1s shots saved</string>
 </resources>

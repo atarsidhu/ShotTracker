@@ -32,6 +32,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     ShotDatabase shotDatabase = ShotDatabase.getInstance();
     private String PATH_TO_DATA;
     private File savedShotsFile;
+    private String fileName;
     ViewShotsFragment viewShotsFragment;
 
     public TrackShotFragment() {
@@ -57,7 +58,8 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
 
         viewShotsFragment = new ViewShotsFragment();
 
-        PATH_TO_DATA = getContext().getFilesDir() + "/savedShots.txt";
+        fileName = "savedShots.txt";
+        PATH_TO_DATA = getContext().getFilesDir() + "/" + fileName;
         savedShotsFile = new File(PATH_TO_DATA);
 
         btnStartStop.setOnClickListener(new View.OnClickListener() {
@@ -72,13 +74,20 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
             @Override
             public void onClick(View v) {
                 //((MainActivity)getActivity()).selectFragment(1); // Switch tab to View Shots
-                ShotDatabase.addShot(club, new Shot(club, yards, ballFlight, tvNotes.getText().toString()));
-                Toast.makeText(getContext(), "Shot Saved!", Toast.LENGTH_SHORT).show();
+                if (club.contains("Select Club:"))
+                    Toast.makeText(getContext(), "Please select a club.", Toast.LENGTH_LONG).show();
+                else {
+                    if(ballFlight == null)
+                        ballFlight = "Straight";
 
-                try {
-                    saveShotToFileAsString();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    ShotDatabase.addShot(club, new Shot(club, yards, ballFlight, tvNotes.getText().toString()));
+                    Toast.makeText(getContext(), "Shot Saved!", Toast.LENGTH_SHORT).show();
+
+                    try {
+                        saveShotToFileAsString();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -111,23 +120,13 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
 
     private void saveShotToFileAsString() throws IOException {
         if(savedShotsFile.length() == 0) {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput("savedShots.txt", Context.MODE_PRIVATE));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput(fileName, Context.MODE_PRIVATE));
             outputStreamWriter.write(ShotDatabase.getLastShot(club).toString());
             outputStreamWriter.close();
         } else{
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput("savedShots.txt", Context.MODE_APPEND));
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput(fileName, Context.MODE_APPEND));
             outputStreamWriter.append("\n" + ShotDatabase.getLastShot(club));
             outputStreamWriter.close();
-
-            /*Bundle bundle = new Bundle();
-            bundle.putString("setSpinner", club); // Put anything what you want
-
-            viewShotsFragment.setArguments(bundle);
-
-            getFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.content, viewShotsFragment)
-                    .commit();*/
         }
     }
 

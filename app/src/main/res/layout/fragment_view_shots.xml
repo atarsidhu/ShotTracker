@@ -14,7 +14,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/tvShowShot"
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.19999999" app:layout_constraintHorizontal_bias="0.19"/>
 
         <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/spinner_clubs_graph"
@@ -24,12 +25,20 @@
                 app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.100000024"/>
         <Button
-                android:text="Button"
+                android:text="@string/delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnDelete" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/tvShowShot"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.92"/>
+
+        <com.github.mikephil.charting.charts.LineChart
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:id="@+id/lineChart" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintVertical_bias="0.65999997">
+        </com.github.mikephil.charting.charts.LineChart>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
