@@ -118,6 +118,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         return view;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     private void saveShotToFileAsString() throws IOException {
         if(savedShotsFile.length() == 0) {
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput(fileName, Context.MODE_PRIVATE));
