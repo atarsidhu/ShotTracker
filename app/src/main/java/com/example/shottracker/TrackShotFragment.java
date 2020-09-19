@@ -1,6 +1,7 @@
 package com.example.shottracker;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class TrackShotFragment extends Fragment implements AdapterView.OnItemSelectedListener {
@@ -33,7 +36,10 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     private String PATH_TO_DATA;
     private File savedShotsFile;
     private String fileName;
-    ViewShotsFragment viewShotsFragment;
+
+    private static final String TAG = "TrackShotFragment";
+    DatabaseHelper databaseHelper;
+    private TextView tvDB;
 
     public TrackShotFragment() {
         // Required empty public constructor
@@ -51,21 +57,26 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         spinner = view.findViewById(R.id.spinner_clubs);
         radioGroup = view.findViewById(R.id.radioGroup);
 
+        //Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.clubs, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
-        viewShotsFragment = new ViewShotsFragment();
-
+        //File
         fileName = "savedShots.txt";
         PATH_TO_DATA = getContext().getFilesDir() + "/" + fileName;
         savedShotsFile = new File(PATH_TO_DATA);
 
+        //Database
+        databaseHelper = new DatabaseHelper(getContext());
+        tvDB = view.findViewById(R.id.tvDB);
+
         btnStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getAndSetGPSLocation();
+                //getAndSetGPSLocation();
+                databaseHelper.deleteData();
             }
         });
 
@@ -74,7 +85,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
             @Override
             public void onClick(View v) {
                 //((MainActivity)getActivity()).selectFragment(1); // Switch tab to View Shots
-                if (club.contains("Select Club:"))
+                /*if (club.contains("Select Club:"))
                     Toast.makeText(getContext(), "Please select a club.", Toast.LENGTH_LONG).show();
                 else {
                     if(ballFlight == null)
@@ -88,7 +99,29 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                }*/
+
+                //DB
+                addData(club, yards, ballFlight, tvNotes.getText().toString());
+                Cursor data = databaseHelper.getAllData();
+                /*ArrayList<String> listData = new ArrayList<>();
+                while(data.moveToNext()){
+                    listData.add(data.getString(1));
                 }
+                tvDB.setText(listData.toString());*/
+
+                HashMap<Integer, ArrayList<Shot>> shots = new HashMap<>();
+
+                if(data.getCount() == 0)
+                    Toast.makeText(getContext(), "No shots saved!", Toast.LENGTH_SHORT).show();
+                else{
+                    while(data.moveToNext()){
+                        shots.putIfAbsent(data.getInt(0), new ArrayList<>());
+                        shots.get(data.getInt(0)).add(new Shot(data.getString(1), data.getFloat(2), data.getString(3), data.getString(4)));
+                    }
+                }
+
+                tvDB.setText(shots.toString());
             }
         });
 
@@ -116,6 +149,15 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         });
 
         return view;
+    }
+
+    private void addData(String club, Double distance, String ballFlight, String notes){
+        boolean insertData = databaseHelper.addData(club, distance, ballFlight, notes);
+
+        if(insertData)
+            Toast.makeText(getContext(), "Shot saved!", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(getContext(), "Shot not saved", Toast.LENGTH_SHORT).show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

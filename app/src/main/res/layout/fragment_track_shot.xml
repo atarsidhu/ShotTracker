@@ -70,7 +70,7 @@
             android:id="@+id/tvCoordinates" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@+id/btnStartStop"
-            app:layout_constraintVertical_bias="0.75"/>
+            app:layout_constraintVertical_bias="0.75" app:layout_constraintHorizontal_bias="0.22"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -99,6 +99,13 @@
             android:id="@+id/btnSaveShot" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnStartStop" app:layout_constraintVertical_bias="0.050000012"/>
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvDB" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tvDistance"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

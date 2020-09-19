@@ -33,6 +33,8 @@ import java.util.HashMap;
 //TODO: Create Cardview to implement pie chart
 //TODO: Can we call readFromFile class from TrackShot class using viewShotsFragment.getContext() as parameter?
 // If so, does that nullify a lot of the code from ViewShots class?
+//TODO: Implement Database first, then move everything to SlideView fragments (Might be easier to access information then).
+//TODO: Splash Screen
 
 public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSelectedListener, OnChartValueSelectedListener {
 
@@ -141,6 +143,9 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
             if(!spinnerClubs.getSelectedItem().toString().contains("Select Club:"))
                 Toast.makeText(getContext(), "No " + club + " shots saved", Toast.LENGTH_SHORT).show();//tvShowShot.setText(getString(R.string.noShotsSaved, club));
         }
+
+        //DB
+
     }
 
     @Override
