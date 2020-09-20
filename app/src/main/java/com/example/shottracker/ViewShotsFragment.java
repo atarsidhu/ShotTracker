@@ -1,6 +1,6 @@
 package com.example.shottracker;
 
-import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -25,14 +25,8 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-//TODO: Do we really need ShotDatabase class if it only saves the shots on each session (Class is volatile)?
-// Or even the shot class for that matter (since we are writing everything to file and thus unable to use methods getNotes, getDistance etc.)?
-// Switch to database to solve ^
 //TODO: Create Cardview to implement pie chart
-//TODO: Can we call readFromFile class from TrackShot class using viewShotsFragment.getContext() as parameter?
-// If so, does that nullify a lot of the code from ViewShots class?
 //TODO: Implement Database first, then move everything to SlideView fragments (Might be easier to access information then).
 //TODO: Splash Screen
 
@@ -42,17 +36,9 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     private Spinner spinnerClubs;
     private String club;
     private Button btnDelete;
-    private boolean deleted;
-    private boolean onlyGettingClubsUsed;
-    private boolean gettingDistancesPerClub;
     private String fileName;
-    private String clubsUsed;
-    private String yardagesPerClub;
-    private HashMap<String, ArrayList<Float>> shotDistancePerClub;
-    private ArrayList<String> notes;
     private ArrayList<Entry> yAxis;
 
-    TrackShotFragment trackShotFragment = new TrackShotFragment();
     ShotDatabase shotDatabase = ShotDatabase.getInstance();
     File dir;
     File file;
@@ -60,6 +46,9 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
 
     private ViewPager viewPager2;
     private PagerAdapter pagerAdapter;
+
+    DatabaseHelper databaseHelper;
+    Cursor data;
 
     public ViewShotsFragment() {
         // Required empty public constructor
@@ -75,8 +64,6 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         fileName = "savedShots.txt";
         dir = getContext().getFilesDir();
         file = new File(dir, fileName);
-        shotDistancePerClub = new HashMap<>();
-        notes = new ArrayList<>();
 
         lineChart = view.findViewById(R.id.lineChart);
         //lineChart.setOnChartGestureListener(this);
@@ -87,6 +74,9 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerClubs.setAdapter(adapter);
         spinnerClubs.setOnItemSelectedListener(this);
+
+        //DB
+        databaseHelper = new DatabaseHelper(getContext());
 
         //Charts
         /*ArrayList<Fragment> fragments = new ArrayList<>();
@@ -100,7 +90,7 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deleteData();
+                databaseHelper.deleteData();
             }
         });
 
@@ -115,96 +105,31 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
 
     }
 
-    private void deleteData() {
-        deleted = file.delete();
-        tvShowShot.setText(getString(R.string.noShotsSaved, club));
-    }
-
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        //Reset values to prevent overwriting
-        shotDistancePerClub.clear();
-        notes.clear();
-
         club = parent.getItemAtPosition(position).toString();
 
-        onlyGettingClubsUsed = true;
-        clubsUsed = readFromFile(getContext());
-        onlyGettingClubsUsed = false;
-
-        if(clubsUsed.contains(club)){
-            tvShowShot.setText("");
+        if(!club.equals("Select Club:"))
             setAndDisplayLineChart();
-        }else {
-            if(lineChart.getData() != null)
-                lineChart.clearValues();
-
-            if(!spinnerClubs.getSelectedItem().toString().contains("Select Club:"))
-                Toast.makeText(getContext(), "No " + club + " shots saved", Toast.LENGTH_SHORT).show();//tvShowShot.setText(getString(R.string.noShotsSaved, club));
-        }
-
-        //DB
-
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    public String readFromFile(Context context) {
-        String shotsSavedFromFile = "";
-
-        try {
-            InputStream inputStream = context.openFileInput(fileName);
-
-            if (inputStream != null) {
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-                String shotReadFromFile;
-                StringBuilder stringBuilderShotsRead = new StringBuilder();
-                StringBuilder previouslyUsedClubs = new StringBuilder();
-
-                while ((shotReadFromFile = bufferedReader.readLine()) != null) {
-                    String[] split = shotReadFromFile.split("#");
-                    if(onlyGettingClubsUsed) {
-                        if(!previouslyUsedClubs.toString().contains(split[0]))
-                            previouslyUsedClubs.append(split[0]).append(" ");
-                    } else{
-                        if(shotReadFromFile.contains(club)) {
-                            stringBuilderShotsRead.append("\n").append(shotReadFromFile);
-                            shotDistancePerClub.putIfAbsent(club, new ArrayList<>());
-                            shotDistancePerClub.get(club).add(Float.valueOf(split[1]));
-                            notes.add(split[3]);
-                        }
-                    }
-                }
-
-                if(onlyGettingClubsUsed)
-                    return previouslyUsedClubs.toString();
-
-                inputStream.close();
-                shotsSavedFromFile = stringBuilderShotsRead.toString();
-            }
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return shotsSavedFromFile;
-    }
+    public void onNothingSelected(AdapterView<?> parent) { }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void setAndDisplayLineChart(){
-        readFromFile(getContext());
         yAxis = new ArrayList<>();
+        data = databaseHelper.getData("all");
 
-        for(int i = 0; i < shotDistancePerClub.get(club).size(); i++){
-            yAxis.add(new Entry(i+1, shotDistancePerClub.get(club).get(i)));
+        int i = 1;
+        if(data != null) {
+            if(data.getCount() > 0) {
+                while (data.moveToNext()) {
+                    if(data.getString(1).contains(club))
+                        yAxis.add(new Entry(i++, data.getFloat(2)));
+                }
+            }
         }
 
         LineDataSet set1 = new LineDataSet(yAxis, "Yards");
@@ -238,10 +163,10 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     public void onValueSelected(Entry e, Highlight h) {
         int shotNum = (int) e.getX() - 1;
 
-        if(!notes.get(shotNum).isEmpty())
+        /*if(!notes.get(shotNum).isEmpty())
             tvShowShot.setText(notes.get(shotNum));
         else
-            tvShowShot.setText("No Notes");
+            tvShowShot.setText("No Notes");*/
     }
 
     @Override

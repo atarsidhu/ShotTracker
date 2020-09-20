@@ -1,6 +1,11 @@
 package com.example.shottracker;
 
+import android.os.Build;
+import androidx.annotation.RequiresApi;
+
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Shot implements Serializable {
 
@@ -33,6 +38,6 @@ public class Shot implements Serializable {
     }
 
     public String toString(){
-        return club + "#" + String.format("%.1f", distance) + "#" + ballFlight + "#" + notes;
+        return club + " " + String.format("%.1f", distance) + " " + ballFlight + " " + notes;
     }
 }

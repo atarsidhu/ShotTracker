@@ -33,9 +33,6 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     private String ballFlight;
     private double yards;
     ShotDatabase shotDatabase = ShotDatabase.getInstance();
-    private String PATH_TO_DATA;
-    private File savedShotsFile;
-    private String fileName;
 
     private static final String TAG = "TrackShotFragment";
     DatabaseHelper databaseHelper;
@@ -63,11 +60,6 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
 
-        //File
-        fileName = "savedShots.txt";
-        PATH_TO_DATA = getContext().getFilesDir() + "/" + fileName;
-        savedShotsFile = new File(PATH_TO_DATA);
-
         //Database
         databaseHelper = new DatabaseHelper(getContext());
         tvDB = view.findViewById(R.id.tvDB);
@@ -75,8 +67,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         btnStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //getAndSetGPSLocation();
-                databaseHelper.deleteData();
+                getAndSetGPSLocation();
             }
         });
 
@@ -84,44 +75,29 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                //((MainActivity)getActivity()).selectFragment(1); // Switch tab to View Shots
-                /*if (club.contains("Select Club:"))
+                if(club.equals("Select Club:"))
                     Toast.makeText(getContext(), "Please select a club.", Toast.LENGTH_LONG).show();
                 else {
                     if(ballFlight == null)
                         ballFlight = "Straight";
 
-                    ShotDatabase.addShot(club, new Shot(club, yards, ballFlight, tvNotes.getText().toString()));
-                    Toast.makeText(getContext(), "Shot Saved!", Toast.LENGTH_SHORT).show();
-
-                    try {
-                        saveShotToFileAsString();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }*/
-
-                //DB
-                addData(club, yards, ballFlight, tvNotes.getText().toString());
-                Cursor data = databaseHelper.getAllData();
-                /*ArrayList<String> listData = new ArrayList<>();
-                while(data.moveToNext()){
-                    listData.add(data.getString(1));
+                    addData(club, yards, ballFlight, tvNotes.getText().toString());
                 }
-                tvDB.setText(listData.toString());*/
 
-                HashMap<Integer, ArrayList<Shot>> shots = new HashMap<>();
+                //Below is just for debugging purposes
+                Cursor data = databaseHelper.getData("all");
+                HashMap<String, ArrayList<Shot>> shots = new HashMap<>();
 
                 if(data.getCount() == 0)
                     Toast.makeText(getContext(), "No shots saved!", Toast.LENGTH_SHORT).show();
                 else{
                     while(data.moveToNext()){
-                        shots.putIfAbsent(data.getInt(0), new ArrayList<>());
-                        shots.get(data.getInt(0)).add(new Shot(data.getString(1), data.getFloat(2), data.getString(3), data.getString(4)));
+                        shots.putIfAbsent(data.getString(1), new ArrayList<>());
+                        shots.get(data.getString(1)).add(new Shot(data.getString(1), data.getFloat(2), data.getString(3), data.getString(4)));
                     }
                 }
-
                 tvDB.setText(shots.toString());
+                //Debugging purposes above
             }
         });
 
@@ -158,19 +134,6 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
             Toast.makeText(getContext(), "Shot saved!", Toast.LENGTH_SHORT).show();
         else
             Toast.makeText(getContext(), "Shot not saved", Toast.LENGTH_SHORT).show();
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    private void saveShotToFileAsString() throws IOException {
-        if(savedShotsFile.length() == 0) {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput(fileName, Context.MODE_PRIVATE));
-            outputStreamWriter.write(ShotDatabase.getLastShot(club).toString());
-            outputStreamWriter.close();
-        } else{
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(getContext().openFileOutput(fileName, Context.MODE_APPEND));
-            outputStreamWriter.append("\n" + ShotDatabase.getLastShot(club));
-            outputStreamWriter.close();
-        }
     }
 
     private void getAndSetGPSLocation(){
