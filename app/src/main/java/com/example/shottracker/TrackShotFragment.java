@@ -65,24 +65,10 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         tvDB = view.findViewById(R.id.tvDB);
 
         btnStartStop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getAndSetGPSLocation();
-            }
-        });
-
-        btnSaveShot.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                if(club.equals("Select Club:"))
-                    Toast.makeText(getContext(), "Please select a club.", Toast.LENGTH_LONG).show();
-                else {
-                    if(ballFlight == null)
-                        ballFlight = "Straight";
-
-                    addData(club, yards, ballFlight, tvNotes.getText().toString());
-                }
+                //getAndSetGPSLocation();
 
                 //Below is just for debugging purposes
                 Cursor data = databaseHelper.getData("all");
@@ -98,6 +84,21 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                 }
                 tvDB.setText(shots.toString());
                 //Debugging purposes above
+            }
+        });
+
+        btnSaveShot.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View v) {
+                if(club.equals("Select Club:"))
+                    Toast.makeText(getContext(), "Please select a club.", Toast.LENGTH_LONG).show();
+                else {
+                    if(ballFlight == null)
+                        ballFlight = "Straight";
+
+                    addData(club, yards, ballFlight, tvNotes.getText().toString());
+                }
             }
         });
 

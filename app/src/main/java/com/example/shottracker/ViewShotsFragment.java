@@ -1,5 +1,6 @@
 package com.example.shottracker;
 
+import android.app.AlertDialog;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
@@ -38,6 +39,8 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     private Button btnDelete;
     private String fileName;
     private ArrayList<Entry> yAxis;
+    private ArrayList<Integer> shotsPerClub;
+
 
     ShotDatabase shotDatabase = ShotDatabase.getInstance();
     File dir;
@@ -122,14 +125,23 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         yAxis = new ArrayList<>();
         data = databaseHelper.getData("all");
 
+        shotsPerClub = new ArrayList<>();
         int i = 1;
         if(data != null) {
-            if(data.getCount() > 0) {
-                while (data.moveToNext()) {
-                    if(data.getString(1).contains(club))
-                        yAxis.add(new Entry(i++, data.getFloat(2)));
+            while (data.moveToNext()) {
+                if(data.getString(1).contains(club)) {
+                    yAxis.add(new Entry(i++, data.getFloat(2)));
+                    shotsPerClub.add(data.getInt(0));
                 }
             }
+        }
+
+        if(yAxis.isEmpty()){
+            Toast.makeText(getContext(), "No " + club + " shots saved", Toast.LENGTH_SHORT).show();
+            lineChart.setNoDataText("No " + club + " shots saved");
+            yAxis.add(new Entry(0, 0));
+            lineChart.getXAxis().setAxisMinimum(0);
+            lineChart.getXAxis().setAxisMaximum(1);
         }
 
         LineDataSet set1 = new LineDataSet(yAxis, "Yards");
@@ -151,6 +163,10 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         lineChart.getAxisRight().setEnabled(false);
         lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         lineChart.getAxisLeft().setAxisMinimum(0);
+        lineChart.getXAxis().resetAxisMaximum();
+        lineChart.getXAxis().resetAxisMinimum();
+        lineChart.getXAxis().setAxisMaximum(1);
+        lineChart.getXAxis().setAxisMaximum(shotsPerClub.size());
         Description description = new Description();
         description.setText("");
         lineChart.setDescription(description);
@@ -162,11 +178,17 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public void onValueSelected(Entry e, Highlight h) {
         int shotNum = (int) e.getX() - 1;
+        int i = 0;
 
-        /*if(!notes.get(shotNum).isEmpty())
-            tvShowShot.setText(notes.get(shotNum));
-        else
-            tvShowShot.setText("No Notes");*/
+        data.moveToPosition(shotsPerClub.get(shotNum) - 1);
+        String message = "Club: " + data.getString(1) + "\nDistance: " + data.getFloat(2)
+                + "\nBall Flight: " + data.getString(3) + "\nNotes: " + data.getString(4);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setCancelable(true);
+        builder.setTitle(club);
+        builder.setMessage(message);
+        builder.show();
     }
 
     @Override

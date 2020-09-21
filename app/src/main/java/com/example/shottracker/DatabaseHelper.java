@@ -66,15 +66,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return data;
     }
 
-    public Cursor getDistance(String club){
-        if((database.rawQuery("SELECT name FROM sqlite_master WHERE type ='table' AND name='" + TABLE_NAME + "'", null)).getCount() > 0) {
-            if (!club.equals("Select Club:"))
-                return database.rawQuery("SELECT " + COL_DISTANCE + " FROM " + TABLE_NAME + " WHERE " + COL_CLUB + " = ?", new String[] {club});
-        }
-
-        return null;
-    }
-
     public void deleteData(){
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
     }
