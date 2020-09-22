@@ -36,4 +36,7 @@
     <!-- View Shot -->
     <string name="delete">Delete All Shots</string>
     <string name="noShotsSaved">No %1s shots saved</string>
+
+    <!-- Misc -->
+    <string name="deleteShot">Delete Shot</string>
 </resources>

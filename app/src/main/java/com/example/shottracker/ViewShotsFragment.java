@@ -1,8 +1,10 @@
 package com.example.shottracker;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -30,6 +32,8 @@ import java.util.ArrayList;
 //TODO: Create Cardview to implement pie chart
 //TODO: Implement Database first, then move everything to SlideView fragments (Might be easier to access information then).
 //TODO: Splash Screen
+//TODO: Tapping on shot from graph and deleting it, then when you tap on a shot with an ID after the ID of the deleted shot, the app crashes
+//TODO: Create Database "Shots" and create a table for each club.
 
 public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSelectedListener, OnChartValueSelectedListener {
 
@@ -41,8 +45,6 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     private ArrayList<Entry> yAxis;
     private ArrayList<Integer> shotsPerClub;
 
-
-    ShotDatabase shotDatabase = ShotDatabase.getInstance();
     File dir;
     File file;
     LineChart lineChart;
@@ -113,8 +115,9 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         club = parent.getItemAtPosition(position).toString();
 
-        if(!club.equals("Select Club:"))
+        if(!club.equals("Select Club:")){
             setAndDisplayLineChart();
+        }
     }
 
     @Override
@@ -123,9 +126,9 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void setAndDisplayLineChart(){
         yAxis = new ArrayList<>();
-        data = databaseHelper.getData("all");
-
         shotsPerClub = new ArrayList<>();
+        data = databaseHelper.getData();
+
         int i = 1;
         if(data != null) {
             while (data.moveToNext()) {
@@ -181,14 +184,16 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         int i = 0;
 
         data.moveToPosition(shotsPerClub.get(shotNum) - 1);
-        String message = "Club: " + data.getString(1) + "\nDistance: " + data.getFloat(2)
+        String message = "ID: " + data.getString(0) + "\nClub: " + data.getString(1) + "\nDistance: " + data.getFloat(2)
                 + "\nBall Flight: " + data.getString(3) + "\nNotes: " + data.getString(4);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setCancelable(true);
-        builder.setTitle(club);
-        builder.setMessage(message);
-        builder.show();
+        ShotPopup shotPopup = new ShotPopup();
+        Bundle args = new Bundle();
+        args.putString("TITLE", club);
+        args.putString("SHOT", message);
+        args.putString("ID", data.getString(0));
+        shotPopup.setArguments(args);
+        shotPopup.show(getFragmentManager(), "Fragment");
     }
 
     @Override

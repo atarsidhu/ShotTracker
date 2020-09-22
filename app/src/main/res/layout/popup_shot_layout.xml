@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="200dp" xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="350dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:orientation="vertical"
+            android:layout_width="350dp"
+            android:layout_height="200dp"
+            android:background="@drawable/popup_shot_background">
+
+        <Button
+                android:text="@string/deleteShot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnDeleteShot"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.95"
+                app:layout_constraintVertical_bias="0.95"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:srcCompat="@android:drawable/btn_dialog"
+                android:id="@+id/imgExit" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.97"
+                app:layout_constraintVertical_bias="0.050000012"/>
+        <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvPopupTitle" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.08"
+                app:layout_constraintVertical_bias="0.050000012" android:textSize="24sp" android:textStyle="bold"/>
+        <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvPopupBody"
+                app:layout_constraintTop_toBottomOf="@+id/tvPopupTitle" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.25" android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.1"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

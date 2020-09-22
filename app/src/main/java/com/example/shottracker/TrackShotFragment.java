@@ -32,7 +32,6 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     private String club;
     private String ballFlight;
     private double yards;
-    ShotDatabase shotDatabase = ShotDatabase.getInstance();
 
     private static final String TAG = "TrackShotFragment";
     DatabaseHelper databaseHelper;
@@ -71,8 +70,9 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                 //getAndSetGPSLocation();
 
                 //Below is just for debugging purposes
-                Cursor data = databaseHelper.getData("all");
+                Cursor data = databaseHelper.getData();
                 HashMap<String, ArrayList<Shot>> shots = new HashMap<>();
+                tvDB.setText("");
 
                 if(data.getCount() == 0)
                     Toast.makeText(getContext(), "No shots saved!", Toast.LENGTH_SHORT).show();
@@ -80,9 +80,10 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                     while(data.moveToNext()){
                         shots.putIfAbsent(data.getString(1), new ArrayList<>());
                         shots.get(data.getString(1)).add(new Shot(data.getString(1), data.getFloat(2), data.getString(3), data.getString(4)));
+                        tvDB.append("\nID: " + data.getString(0));
                     }
                 }
-                tvDB.setText(shots.toString());
+                tvDB.append(shots.toString());
                 //Debugging purposes above
             }
         });
@@ -97,7 +98,10 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                     if(ballFlight == null)
                         ballFlight = "Straight";
 
-                    addData(club, yards, ballFlight, tvNotes.getText().toString());
+                    addData(club, 250.0, ballFlight, tvNotes.getText().toString());
+                    addData(club, 260.0, ballFlight, tvNotes.getText().toString());
+                    addData(club, 270.0, ballFlight, tvNotes.getText().toString());
+                    addData(club, 280.0, ballFlight, tvNotes.getText().toString());
                 }
             }
         });

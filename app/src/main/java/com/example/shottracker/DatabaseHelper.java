@@ -13,6 +13,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private SQLiteDatabase database = this.getWritableDatabase();
 
+    private static final String DATABASE_NAME = "Shots.db";
     private static final String TABLE_NAME = "shots";
     private static final String COLUMN0 = "id";
     private static final String COL_CLUB = "club";
@@ -55,18 +56,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result != -1; //(if result == -1 return false else true
     }
 
-    public Cursor getData(String column){
-        //database = this.getWritableDatabase();
+    public Cursor getData(){
         Cursor data = null;
-        if(column.equals("all"))
-            data = database.rawQuery("SELECT * FROM " + TABLE_NAME, null);
-        /*if(column.equals("distance"))
-            data = database.rawQuery("SELECT " + COLUMN2 + " FROM " + TABLE_NAME + " WHERE " + COLUMN1 + " = " + club);*/
+        Cursor cursor = database.rawQuery("SELECT DISTINCT tbl_name FROM sqlite_master WHERE tbl_name = '"
+                + TABLE_NAME + "'", null);
 
+        if(cursor.getCount() > 0)
+            data = database.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+
+        cursor.close();
         return data;
+    }
+
+    public int deleteShot(String id){
+        return database.delete(TABLE_NAME,  "id = ?", new String[] {id});
     }
 
     public void deleteData(){
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        //database.delete(TABLE_NAME, null,null);
     }
 }
