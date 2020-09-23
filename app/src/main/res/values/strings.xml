@@ -13,14 +13,14 @@
     <string-array name="clubs">
         <item>Select Club:</item>
         <item>Driver</item>
-        <item>3-Wood</item>
+        <item>3 Wood</item>
         <item>Hybrid</item>
-        <item>4-Iron</item>
-        <item>5-Iron</item>
-        <item>6-Iron</item>
-        <item>7-Iron</item>
-        <item>8-Iron</item>
-        <item>9-Iron</item>
+        <item>4iron</item>
+        <item>5iron</item>
+        <item>6iron</item>
+        <item>7iron</item>
+        <item>8iron</item>
+        <item>9iron</item>
         <item>PW</item>
     </string-array>
 

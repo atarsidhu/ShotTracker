@@ -99,7 +99,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                         ballFlight = "Straight";
 
                     addData(club, 250.0, ballFlight, tvNotes.getText().toString());
-                    addData(club, 260.0, ballFlight, tvNotes.getText().toString());
+                    addData(club, yards, ballFlight, tvNotes.getText().toString());
                     addData(club, 270.0, ballFlight, tvNotes.getText().toString());
                     addData(club, 280.0, ballFlight, tvNotes.getText().toString());
                 }
@@ -153,6 +153,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                 endingLatitude = 0.0;
                 btnStartStop.setText(R.string.stopTracker);
                 tvCoordinates.setText(startingLatitude + " " + startingLongitude + "\n");
+                tvDistance.setText("0 yards");
             } else{
                 endingLatitude = location.getLatitude();
                 endingLongitude = location.getLongitude();

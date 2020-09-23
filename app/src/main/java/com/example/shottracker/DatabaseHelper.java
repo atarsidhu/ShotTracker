@@ -76,4 +76,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         //database.delete(TABLE_NAME, null,null);
     }
+
+    public void moveToRow(){
+        Cursor cursor;
+    }
 }

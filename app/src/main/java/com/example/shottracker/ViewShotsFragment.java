@@ -34,6 +34,7 @@ import java.util.ArrayList;
 //TODO: Splash Screen
 //TODO: Tapping on shot from graph and deleting it, then when you tap on a shot with an ID after the ID of the deleted shot, the app crashes
 //TODO: Create Database "Shots" and create a table for each club.
+//TODO: Long notes doesnt fit in popup box AND doesnt fit in homepage
 
 public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSelectedListener, OnChartValueSelectedListener {
 
@@ -117,6 +118,9 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
 
         if(!club.equals("Select Club:")){
             setAndDisplayLineChart();
+        } else {
+            if(isMenuVisible())
+                Toast.makeText(getContext(), "Please select a club", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -153,6 +157,7 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         set1.setLineWidth(3);
         set1.setValueTextSize(10);
         set1.setValueTextColor(Color.GRAY);
+        //set1.setDrawValues(false);
         set1.setDrawCircleHole(false);
         set1.setCircleRadius(5);
         set1.setCircleColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -170,6 +175,7 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         lineChart.getXAxis().resetAxisMinimum();
         lineChart.getXAxis().setAxisMaximum(1);
         lineChart.getXAxis().setAxisMaximum(shotsPerClub.size());
+        lineChart.getXAxis().setDrawGridLines(false);
         Description description = new Description();
         description.setText("");
         lineChart.setDescription(description);
@@ -181,17 +187,27 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public void onValueSelected(Entry e, Highlight h) {
         int shotNum = (int) e.getX() - 1;
-        int i = 0;
 
-        data.moveToPosition(shotsPerClub.get(shotNum) - 1);
-        String message = "ID: " + data.getString(0) + "\nClub: " + data.getString(1) + "\nDistance: " + data.getFloat(2)
-                + "\nBall Flight: " + data.getString(3) + "\nNotes: " + data.getString(4);
+        String message = "";
+        String id = "";
+        data.moveToFirst();
+
+        do{
+            float distInDatabase = data.getFloat(2);
+            if(e.getY() == distInDatabase) {
+                //Format distance to 1 decimal place here.
+                id = data.getString(0);
+                message = "ID: " + id + "\nClub: " + data.getString(1) + "\nDistance: " + String.format("%.1f yards", data.getFloat(2))
+                        + "\nBall Flight: " + data.getString(3) + "\nNotes: " + data.getString(4);
+
+            }
+        } while(data.moveToNext());
 
         ShotPopup shotPopup = new ShotPopup();
         Bundle args = new Bundle();
         args.putString("TITLE", club);
         args.putString("SHOT", message);
-        args.putString("ID", data.getString(0));
+        args.putString("ID", id);
         shotPopup.setArguments(args);
         shotPopup.show(getFragmentManager(), "Fragment");
     }
