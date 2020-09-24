@@ -16,13 +16,13 @@
                 app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.060000002" app:layout_constraintHorizontal_bias="0.19"/>
 
-        <androidx.appcompat.widget.AppCompatSpinner
+<!--        <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/spinner_clubs_graph"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.029999971"/>
+                app:layout_constraintVertical_bias="0.83"/>-->
         <Button
                 android:text="@string/delete"
                 android:layout_width="wrap_content"
@@ -31,23 +31,24 @@
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/tvShowShot"
                 app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.92"/>
 
-        <!--<androidx.viewpager.widget.ViewPager
-                android:layout_width="300dp"
-                android:layout_height="300dp"
+        <androidx.viewpager.widget.ViewPager
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:id="@+id/viewPager2"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.0">
 
-        </androidx.viewpager.widget.ViewPager>-->
-
+        </androidx.viewpager.widget.ViewPager>
+<!--
         <com.github.mikephil.charting.charts.LineChart
-                android:layout_width="350dp"
-                android:layout_height="350dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:id="@+id/lineChart" app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-        </com.github.mikephil.charting.charts.LineChart>
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintVertical_bias="0.95"
+                app:layout_constraintHorizontal_bias="0.09">
+        </com.github.mikephil.charting.charts.LineChart>-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

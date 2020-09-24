@@ -1,6 +1,5 @@
 package com.example.shottracker;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.location.Location;
 import android.net.Uri;
@@ -12,8 +11,6 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -29,11 +26,9 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     private double endingLongitude = 0.0;
     private Spinner spinner;
     private RadioGroup radioGroup;
-    private String club;
-    private String ballFlight;
+    private String club, ballFlight;
     private double yards;
 
-    private static final String TAG = "TrackShotFragment";
     DatabaseHelper databaseHelper;
     private TextView tvDB;
 
@@ -99,9 +94,10 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                         ballFlight = "Straight";
 
                     addData(club, 250.0, ballFlight, tvNotes.getText().toString());
-                    addData(club, yards, ballFlight, tvNotes.getText().toString());
+                    addData(club, 258.9, ballFlight, tvNotes.getText().toString());
                     addData(club, 270.0, ballFlight, tvNotes.getText().toString());
                     addData(club, 280.0, ballFlight, tvNotes.getText().toString());
+
                 }
             }
         });

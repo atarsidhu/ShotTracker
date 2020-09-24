@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements
     private TabLayout tabLayout;
     private TrackShotFragment trackShotFragment;
     private ViewShotsFragment viewShotsFragment;
+    private LineChartDistance lineChartDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

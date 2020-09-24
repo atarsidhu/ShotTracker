@@ -9,12 +9,9 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String TAG = "DatabaseHelper";
-
     private SQLiteDatabase database = this.getWritableDatabase();
 
-    private static final String DATABASE_NAME = "Shots.db";
-    private static final String TABLE_NAME = "shots";
+    private static final String TABLE_NAME = "shot";
     private static final String COLUMN0 = "id";
     private static final String COL_CLUB = "club";
     private static final String COL_DISTANCE = "distance";
@@ -43,7 +40,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COL_CLUB + " TEXT, " + COL_DISTANCE + " REAL, " + COL_BALL_FLIGHT + " TEXT, " + COL_NOTES + " TEXT)");
 
-        //database = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         contentValues.put(COL_CLUB, club);
@@ -72,12 +68,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return database.delete(TABLE_NAME,  "id = ?", new String[] {id});
     }
 
-    public void deleteData(){
+    public boolean deleteData(){
         database.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        //database.delete(TABLE_NAME, null,null);
-    }
-
-    public void moveToRow(){
-        Cursor cursor;
+        return getData() == null;
     }
 }

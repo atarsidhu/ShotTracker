@@ -16,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.DialogFragment;
-import com.github.mikephil.charting.data.Entry;
 
 public class ShotPopup extends DialogFragment {
 
@@ -66,8 +65,6 @@ public class ShotPopup extends DialogFragment {
                 else
                     Toast.makeText(getContext(), "Shot not deleted!", Toast.LENGTH_SHORT).show();
 
-                /*ViewShotsFragment viewShotsFragment = new ViewShotsFragment();
-                viewShotsFragment.setAndDisplayLineChart();*/
                 dismiss();
             }
         });
