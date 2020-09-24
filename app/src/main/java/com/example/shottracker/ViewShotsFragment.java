@@ -1,7 +1,6 @@
 package com.example.shottracker;
 
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,13 +13,8 @@ import android.view.ViewGroup;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Description;
-import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import java.util.ArrayList;
 
@@ -75,7 +69,7 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         //Charts
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(new LineChartDistance());
-        fragments.add(new com.example.shottracker.PieChart());
+        fragments.add(new PieChartBallFlight());
         viewPager = view.findViewById(R.id.viewPager2);
         pagerAdapter = new SlidePagerAdapter(getFragmentManager(), fragments);
         viewPager.setAdapter(pagerAdapter);

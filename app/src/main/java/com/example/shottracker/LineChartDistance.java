@@ -31,8 +31,6 @@ public class LineChartDistance extends Fragment implements OnChartValueSelectedL
     private ArrayList<Entry> yAxis;
     private Spinner spinnerClubs;
     LineChart lineChart;
-    private ArrayList<Entry> shotsDisplayedOnGraph;
-    private ArrayList<Integer> shotsPerClub;
     private String club;
     private boolean preventSelectClubToast = false;
 
@@ -48,12 +46,12 @@ public class LineChartDistance extends Fragment implements OnChartValueSelectedL
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.line_chart, container, false);
-        spinnerClubs = view.findViewById(R.id.spinner_clubs_graph2);
 
         lineChart = view.findViewById(R.id.lineChart2);
         lineChart.setOnChartValueSelectedListener(this);
 
         //Spinner configurations
+        spinnerClubs = view.findViewById(R.id.spinner_clubs_graph2);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.clubs, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerClubs.setAdapter(adapter);
@@ -102,8 +100,8 @@ public class LineChartDistance extends Fragment implements OnChartValueSelectedL
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void setAndDisplayLineChart(){
-        shotsDisplayedOnGraph = new ArrayList<>();
-        shotsPerClub = new ArrayList<>();
+        ArrayList<Entry> shotsDisplayedOnGraph = new ArrayList<>();
+        ArrayList<Integer> shotsPerClub = new ArrayList<>();
         data = databaseHelper.getData();
 
         int i = 1;
@@ -111,7 +109,8 @@ public class LineChartDistance extends Fragment implements OnChartValueSelectedL
             while (data.moveToNext()) {
                 if (data.getString(1).contains(club)) {
                     shotsDisplayedOnGraph.add(new Entry(i++, data.getFloat(2)));
-                    shotsPerClub.add(data.getInt(0));
+                    //shotsPerClub.add(data.getInt(0)); //Should be i?
+
                 }
             }
         }
@@ -133,9 +132,11 @@ public class LineChartDistance extends Fragment implements OnChartValueSelectedL
         set1.setDrawCircleHole(false);
         set1.setCircleRadius(5);
         set1.setCircleColor(getResources().getColor(R.color.colorPrimaryDark));
+
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
         LineData lineData = new LineData(dataSets);
+
         lineChart.setDragEnabled(false);
         lineChart.setScaleEnabled(true);
         lineChart.setMaxHighlightDistance(30);
@@ -145,15 +146,15 @@ public class LineChartDistance extends Fragment implements OnChartValueSelectedL
         lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         lineChart.getAxisLeft().setAxisMinimum(0);
         lineChart.getXAxis().setAxisMinimum(1);
-        lineChart.getXAxis().setAxisMaximum(shotsPerClub.size());
+        //lineChart.getXAxis().setAxisMaximum(shotsPerClub.size());
+        lineChart.getXAxis().setAxisMaximum(i-1);
         if(shotsDisplayedOnGraph.get(0).getX() == 0){
             lineChart.getXAxis().setAxisMinimum(0);
             lineChart.getXAxis().setAxisMaximum(1);
         }
         lineChart.getXAxis().setDrawGridLines(false);
-        Description description = new Description();
-        description.setText("");
-        lineChart.setDescription(description);
+        lineChart.getDescription().setEnabled(false);
+
         lineChart.setData(lineData);
         lineChart.invalidate();
     }
@@ -163,8 +164,6 @@ public class LineChartDistance extends Fragment implements OnChartValueSelectedL
     public void onValueSelected(Entry e, Highlight h) {
         if(data != null) {
             if (data.getCount() > 0) {
-                int shotNum = (int) e.getX() - 1;
-
                 String message = "";
                 String id = "";
                 data.moveToFirst();
@@ -172,7 +171,6 @@ public class LineChartDistance extends Fragment implements OnChartValueSelectedL
                 do {
                     float distInDatabase = data.getFloat(2);
                     if (e.getY() == distInDatabase) {
-                        //Format distance to 1 decimal place here.
                         id = data.getString(0);
                         message = "ID: " + id + "\nClub: " + data.getString(1) + "\nDistance: " + String.format("%.1f yards", data.getFloat(2))
                                 + "\nBall Flight: " + data.getString(3) + "\nNotes: " + data.getString(4);

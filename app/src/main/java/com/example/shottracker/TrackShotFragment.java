@@ -93,10 +93,13 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                     if(ballFlight == null)
                         ballFlight = "Straight";
 
-                    addData(club, 250.0, ballFlight, tvNotes.getText().toString());
-                    addData(club, 258.9, ballFlight, tvNotes.getText().toString());
-                    addData(club, 270.0, ballFlight, tvNotes.getText().toString());
-                    addData(club, 280.0, ballFlight, tvNotes.getText().toString());
+                    addData(club, 250.0, "Straight", tvNotes.getText().toString());
+                    addData(club, 258.9, "Draw", tvNotes.getText().toString());
+                    addData(club, 270.0, "Hook", tvNotes.getText().toString());
+                    addData(club, 280.0, "Slice", tvNotes.getText().toString());
+                    addData(club, 280.0, "Fade", tvNotes.getText().toString());
+                    addData(club, 210.0, "Fade", tvNotes.getText().toString());
+                    addData(club, 280.0, "Fade", tvNotes.getText().toString());
 
                 }
             }
