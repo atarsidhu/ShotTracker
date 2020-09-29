@@ -4,6 +4,7 @@ import android.Manifest;
 import android.location.Location;
 import android.net.Uri;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -32,7 +33,6 @@ public class MainActivity extends AppCompatActivity implements
     private TabLayout tabLayout;
     private TrackShotFragment trackShotFragment;
     private ViewShotsFragment viewShotsFragment;
-    private LineChartDistance lineChartDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

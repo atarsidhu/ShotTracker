@@ -1,6 +1,7 @@
 package com.example.shottracker;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,19 +14,26 @@ import android.view.ViewGroup;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.charts.PieChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.data.*;
 import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import java.util.ArrayList;
+import com.github.mikephil.charting.utils.ColorTemplate;
 
-//TODO: Create Cardview to implement pie chart
-//TODO: Implement Database first, then move everything to SlideView fragments (Might be easier to access information then).
+import java.util.ArrayList;
+import java.util.HashMap;
+
 //TODO: Splash Screen
 //TODO: Long notes doesnt fit in popup box AND doesnt fit in homepage
+//TODO: Instead of pieChart for ball flight, have animation of ball actually travelling the flight and show percentages of each flight
+//TODO: Set spinner selection from linechart fragment to piechart fragment
+//TODO: ScrollView with both charts on one page. Then can set spinner for each graph and set spinner to 0 when going back to main screen
 
 public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSelectedListener, OnChartValueSelectedListener {
 
-    private TextView tvShowShot;
+    private TextView tvShowShot, tvPieChartTitle;
     private Spinner spinnerClubs;
     private String club;
     private Button btnDelete;
@@ -33,12 +41,13 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     private ArrayList<Integer> shotsPerClub;
     private boolean preventSelectClubToast = false;
 
-    LineChart lineChart;
+    private LineChart lineChart;
+    private PieChart pieChart;
 
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
 
-    DatabaseHelper databaseHelper;
+    private DatabaseHelper databaseHelper;
     Cursor data;
 
     public ViewShotsFragment() {
@@ -51,28 +60,30 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_shots, container, false);
         tvShowShot = view.findViewById(R.id.tvShowShot);
-        btnDelete = view.findViewById(R.id.btnDelete);
-        /*spinnerClubs = view.findViewById(R.id.spinner_clubs_graph);
+        tvPieChartTitle = view.findViewById(R.id.tvPieChartTitle);
+        btnDelete = view.findViewById(R.id.btnDelete5);
+        spinnerClubs = view.findViewById(R.id.spinner_clubs_graph5);
 
-        lineChart = view.findViewById(R.id.lineChart);
+        lineChart = view.findViewById(R.id.lineChart5);
         lineChart.setOnChartValueSelectedListener(this);
+        pieChart = view.findViewById(R.id.pieChart5);
 
         //Spinner configurations
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.clubs, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerClubs.setAdapter(adapter);
-        spinnerClubs.setOnItemSelectedListener(this);*/
+        spinnerClubs.setOnItemSelectedListener(this);
 
         //DB
         databaseHelper = new DatabaseHelper(getContext());
 
         //Charts
-        ArrayList<Fragment> fragments = new ArrayList<>();
+        /*ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(new LineChartDistance());
         fragments.add(new PieChartBallFlight());
         viewPager = view.findViewById(R.id.viewPager2);
         pagerAdapter = new SlidePagerAdapter(getFragmentManager(), fragments);
-        viewPager.setAdapter(pagerAdapter);
+        viewPager.setAdapter(pagerAdapter);*/
 
         //setAndDisplayLineChart();
 
@@ -92,27 +103,28 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
 
     @Override
     public void setMenuVisibility(boolean menuVisible) {
-/*        super.setMenuVisibility(menuVisible);
-        if(menuVisible) {
-            preventSelectClubToast = true;
+        super.setMenuVisibility(menuVisible);
+        if(isVisible()) { //menuVisible?
+            //preventSelectClubToast = true;
             spinnerClubs.setSelection(0);
-        }*/
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-/*
         club = parent.getItemAtPosition(position).toString();
 
-        if(isMenuVisible()) {
+        /*if(isMenuVisible()) {
             if(!preventSelectClubToast) {
                 Toast.makeText(getContext(), "Please select a club", Toast.LENGTH_SHORT).show();
                 preventSelectClubToast = false;
             }
             setAndDisplayLineChart();
-        }
-*/
+        }*/
+
+        setAndDisplayLineChart();
+        setAndDisplayPieChart();
 
     }
 
@@ -121,22 +133,25 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void setAndDisplayLineChart(){
-        /*shotsDisplayedOnGraph = new ArrayList<>();
-        shotsPerClub = new ArrayList<>();
+        ArrayList<Entry> shotsDisplayedOnGraph = new ArrayList<>();
         data = databaseHelper.getData();
+        float max = 0f;
+        int i = 0;
 
-        int i = 1;
-        if(isMenuVisible() && data != null) {
+        if(isVisible() && data != null) {
             while (data.moveToNext()) {
                 if (data.getString(1).contains(club)) {
-                    shotsDisplayedOnGraph.add(new Entry(i++, data.getFloat(2)));
-                    shotsPerClub.add(data.getInt(0));
+                    shotsDisplayedOnGraph.add(new Entry(++i, data.getFloat(2)));
+
+                    if(data.getFloat(2) > max)
+                        max = data.getFloat(2);
+
                 }
             }
         }
 
         if(shotsDisplayedOnGraph.isEmpty()){
-            if(isMenuVisible() && !club.contains("Select Club:")) {
+            if(isVisible() && !club.contains("Select Club:")) {
                 Toast.makeText(getContext(), "No " + club + " shots saved", Toast.LENGTH_SHORT).show();
             }
             shotsDisplayedOnGraph.add(new Entry(0, 0));
@@ -152,59 +167,139 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         set1.setDrawCircleHole(false);
         set1.setCircleRadius(5);
         set1.setCircleColor(getResources().getColor(R.color.colorPrimaryDark));
+
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(set1);
         LineData lineData = new LineData(dataSets);
+
         lineChart.setDragEnabled(false);
-        //lineChart.setScaleEnabled(false);
+        lineChart.setScaleEnabled(true);
+        lineChart.setMaxHighlightDistance(30);
         lineChart.setPinchZoom(true);
         lineChart.setDoubleTapToZoomEnabled(true);
         lineChart.getAxisRight().setEnabled(false);
         lineChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
         lineChart.getAxisLeft().setAxisMinimum(0);
+        lineChart.getAxisLeft().setAxisMaximum(max + 10);
         lineChart.getXAxis().setAxisMinimum(1);
-        lineChart.getXAxis().setAxisMaximum(shotsPerClub.size());
+        lineChart.getXAxis().setAxisMaximum(i);
         if(shotsDisplayedOnGraph.get(0).getX() == 0){
             lineChart.getXAxis().setAxisMinimum(0);
             lineChart.getXAxis().setAxisMaximum(1);
         }
         lineChart.getXAxis().setDrawGridLines(false);
-        Description description = new Description();
-        description.setText("");
-        lineChart.setDescription(description);
+        lineChart.getDescription().setEnabled(false);
+
         lineChart.setData(lineData);
-        lineChart.invalidate();*/
+        lineChart.invalidate();
     }
 
-    //Chart touch functions
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public void setAndDisplayPieChart(){
+        ArrayList<PieEntry> shotFlightsDisplayedOnGraph = new ArrayList<>();
+        data = databaseHelper.getData();
+        int hook = 0;
+        int draw = 0;
+        int straight = 0;
+        int fade = 0;
+        int slice = 0;
+        HashMap<String, Integer> ballFlight = new HashMap<>();
+
+        if(isVisible() && data != null) {
+            while (data.moveToNext()) {
+                if (data.getString(1).contains(club) || club.contains("Select Club:")) {
+                    switch (data.getString(3)){
+                        case "Hook":
+                            ballFlight.putIfAbsent("Hook", ++hook);
+                            ballFlight.replace("Hook", ++hook);
+                            break;
+                        case "Draw":
+                            ballFlight.putIfAbsent("Draw", ++draw);
+                            ballFlight.replace("Draw", ++draw);
+                            break;
+                        case "Straight":
+                            ballFlight.putIfAbsent("Straight", ++straight);
+                            ballFlight.replace("Straight", ++straight);
+                            break;
+                        case "Fade":
+                            ballFlight.putIfAbsent("Fade", ++fade);
+                            ballFlight.replace("Fade", ++fade);
+                            break;
+                        case "Slice":
+                            ballFlight.putIfAbsent("Slice", ++slice);
+                            ballFlight.replace("Slice", ++slice);
+                            break;
+                    }
+                }
+            }
+
+            for(String s: ballFlight.keySet()){
+                shotFlightsDisplayedOnGraph.add(new PieEntry(ballFlight.get(s), s));
+            }
+            //shotFlightsDisplayedOnGraph.add(new PieEntry(hook, data.getString(3)));
+        }
+
+        if(ballFlight.isEmpty()){
+            if(isVisible() && !club.contains("Select Club:"))
+                Toast.makeText(getContext(), "No " + club + " shots saved", Toast.LENGTH_SHORT).show();
+
+            //shotFlightsDisplayedOnGraph.add(new PieEntry(1, "No " + club + " shots saved"));
+        }
+
+        if(club.contains("Select Club:")){
+            tvPieChartTitle.setText("\nAll Clubs Ball Flight\n");
+        } else{
+            tvPieChartTitle.setText("\n" + club + " Ball Flights\n");
+        }
+
+        pieChart.setUsePercentValues(true);
+        pieChart.getDescription().setEnabled(false);
+        pieChart.setDrawHoleEnabled(true);
+        pieChart.setHoleRadius(0);
+        pieChart.setTransparentCircleRadius(0);
+        pieChart.setEntryLabelColor(Color.BLACK);
+        //pieChart.setExtraOffsets(5, 10, 5, 5); // Moves piechart
+
+        PieDataSet dataSet = new PieDataSet(shotFlightsDisplayedOnGraph, "Ball Flight");
+        dataSet.setSliceSpace(1);
+        dataSet.setColors(ColorTemplate.JOYFUL_COLORS);
+
+        PieData pieData = new PieData(dataSet);
+        pieData.setValueTextColor(Color.BLACK);
+        pieData.setValueTextSize(10);
+
+        pieChart.setData(pieData);
+        pieChart.invalidate();
+    }
+
+    //Chart
     @Override
     public void onValueSelected(Entry e, Highlight h) {
-        /*if(data.getCount() > 0) {
-            int shotNum = (int) e.getX() - 1;
+        if(data != null) {
+            if (data.getCount() > 0) {
+                String message = "";
+                String id = "";
+                data.moveToFirst();
 
-            String message = "";
-            String id = "";
-            data.moveToFirst();
+                do {
+                    float distInDatabase = data.getFloat(2);
+                    if (e.getY() == distInDatabase) {
+                        id = data.getString(0);
+                        message = "ID: " + id + "\nClub: " + data.getString(1) + "\nDistance: " + String.format("%.1f yards", data.getFloat(2))
+                                + "\nBall Flight: " + data.getString(3) + "\nNotes: " + data.getString(4);
 
-            do {
-                float distInDatabase = data.getFloat(2);
-                if (e.getY() == distInDatabase) {
-                    //Format distance to 1 decimal place here.
-                    id = data.getString(0);
-                    message = "ID: " + id + "\nClub: " + data.getString(1) + "\nDistance: " + String.format("%.1f yards", data.getFloat(2))
-                            + "\nBall Flight: " + data.getString(3) + "\nNotes: " + data.getString(4);
+                    }
+                } while (data.moveToNext());
 
-                }
-            } while (data.moveToNext());
-
-            ShotPopup shotPopup = new ShotPopup();
-            Bundle args = new Bundle();
-            args.putString("TITLE", club);
-            args.putString("SHOT", message);
-            args.putString("ID", id);
-            shotPopup.setArguments(args);
-            shotPopup.show(getFragmentManager(), "Fragment");
-        }*/
+                ShotPopup shotPopup = new ShotPopup();
+                Bundle args = new Bundle();
+                args.putString("TITLE", club);
+                args.putString("SHOT", message);
+                args.putString("ID", id);
+                shotPopup.setArguments(args);
+                shotPopup.show(getFragmentManager(), "Fragment");
+            }
+        }
     }
 
     @Override

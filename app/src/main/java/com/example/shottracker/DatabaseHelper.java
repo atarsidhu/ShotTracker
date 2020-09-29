@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private SQLiteDatabase database = this.getWritableDatabase();
+    private SQLiteDatabase database;
 
     private static final String TABLE_NAME = "shot";
     private static final String COLUMN0 = "id";
@@ -20,6 +20,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public DatabaseHelper(@Nullable Context context) {
         super(context, TABLE_NAME, null, 1);
+        database = this.getWritableDatabase();
     }
 
     @Override

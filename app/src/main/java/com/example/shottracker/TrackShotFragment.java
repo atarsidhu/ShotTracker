@@ -29,7 +29,8 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     private String club, ballFlight;
     private double yards;
 
-    DatabaseHelper databaseHelper;
+    private DatabaseHelper databaseHelper;
+    private Cursor cursor;
     private TextView tvDB;
 
     public TrackShotFragment() {
@@ -93,13 +94,13 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                     if(ballFlight == null)
                         ballFlight = "Straight";
 
-                    addData(club, 250.0, "Straight", tvNotes.getText().toString());
-                    addData(club, 258.9, "Draw", tvNotes.getText().toString());
-                    addData(club, 270.0, "Hook", tvNotes.getText().toString());
-                    addData(club, 280.0, "Slice", tvNotes.getText().toString());
-                    addData(club, 280.0, "Fade", tvNotes.getText().toString());
-                    addData(club, 210.0, "Fade", tvNotes.getText().toString());
-                    addData(club, 280.0, "Fade", tvNotes.getText().toString());
+                    addData(club, 213.11, "Straight", tvNotes.getText().toString());
+                    addData(club, 228.9, "Draw", tvNotes.getText().toString());
+                    addData(club, 230.0, "Hook", tvNotes.getText().toString());
+                    addData(club, 230.1, "Slice", tvNotes.getText().toString());
+                    addData(club, 220.8, "Fade", tvNotes.getText().toString());
+                    addData(club, 230.9, "Draw", tvNotes.getText().toString());
+                    addData(club, 223.9, "Slice", tvNotes.getText().toString());
 
                 }
             }

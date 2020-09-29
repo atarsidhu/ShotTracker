@@ -16,40 +16,63 @@
                 app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.060000002" app:layout_constraintHorizontal_bias="0.19"/>
 
-<!--        <androidx.appcompat.widget.AppCompatSpinner
-                android:id="@+id/spinner_clubs_graph"
+        <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinner_clubs_graph5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.83"/>-->
+                android:layout_gravity="center" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="475dp" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" android:id="@+id/scrollView2">
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Distances\n"
+                        android:textSize="20sp"/>
+
+                <com.github.mikephil.charting.charts.LineChart
+                        android:layout_width="match_parent"
+                        android:layout_height="350dp"
+                        android:id="@+id/lineChart5"
+                        android:layout_gravity="center">
+                </com.github.mikephil.charting.charts.LineChart>
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvPieChartTitle"
+                        android:layout_gravity="center"
+                        android:textSize="20sp" />
+
+                <com.github.mikephil.charting.charts.PieChart
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:id="@+id/pieChart5"
+                        android:layout_gravity="center">
+                </com.github.mikephil.charting.charts.PieChart>
+
+            </LinearLayout>
+
+        </ScrollView>
+
         <Button
                 android:text="@string/delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btnDelete" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/tvShowShot"
-                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.92"/>
-
-        <androidx.viewpager.widget.ViewPager
-                android:layout_width="match_parent"
-                android:layout_height="600dp"
-                android:id="@+id/viewPager2"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.0">
-
-        </androidx.viewpager.widget.ViewPager>
-<!--
-        <com.github.mikephil.charting.charts.LineChart
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:id="@+id/lineChart" app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintVertical_bias="0.95"
-                app:layout_constraintHorizontal_bias="0.09">
-        </com.github.mikephil.charting.charts.LineChart>-->
-
+                android:id="@+id/btnDelete5" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scrollView2" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
