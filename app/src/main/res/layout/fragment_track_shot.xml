@@ -15,35 +15,40 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-    >
+            app:layout_constraintTop_toTopOf="parent">
+
         <RadioButton
                 android:id="@+id/rbHook"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/hook"/>
+                android:text="@string/hook"
+                android:buttonTint="@color/colorPrimary"/>
         <RadioButton
                 android:id="@+id/rbDraw"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/draw"/>
+                android:text="@string/draw"
+                android:buttonTint="@color/colorPrimary"/>
         <RadioButton
                 android:id="@+id/rbStraight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/straight"
-                android:checked="true"/>
+                android:checked="true"
+                android:buttonTint="@color/colorPrimary"/>
         <RadioButton
                 android:id="@+id/rbFade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/fade"/>
+                android:text="@string/fade"
+                android:buttonTint="@color/colorPrimary"/>
 
         <RadioButton
                 android:id="@+id/rbSlice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/slice"/>
+                android:text="@string/slice"
+                android:buttonTint="@color/colorPrimary"/>
 
 
     </RadioGroup>
@@ -51,7 +56,9 @@
     <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/spinner_clubs"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="wrap_content"
+            style="@style/spinner_style"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.39"/>
@@ -61,9 +68,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnStartStop"
+            android:background="@drawable/button_background"
+            android:minHeight="40dp"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.85"/>
+            app:layout_constraintVertical_bias="0.85" android:textSize="14sp"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,16 +105,20 @@
             android:text="@string/saveShot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btnSaveShot" app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/btnSaveShot"
+            android:background="@drawable/button_background"
+            android:minHeight="40dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnStartStop" app:layout_constraintVertical_bias="0.050000012"/>
-    <TextView
-            android:text="TextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvDB" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/tvDistance"/>
+            app:layout_constraintTop_toBottomOf="@+id/btnStartStop" app:layout_constraintVertical_bias="0.050000012"
+            android:textSize="14sp"/>
+    <!--    <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDB" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/tvDistance"/>-->
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 

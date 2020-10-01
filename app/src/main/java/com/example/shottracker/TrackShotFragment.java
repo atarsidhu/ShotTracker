@@ -31,7 +31,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
 
     private DatabaseHelper databaseHelper;
     private Cursor cursor;
-    private TextView tvDB;
+    //private TextView tvDB;
 
     public TrackShotFragment() {
         // Required empty public constructor
@@ -57,15 +57,15 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
 
         //Database
         databaseHelper = new DatabaseHelper(getContext());
-        tvDB = view.findViewById(R.id.tvDB);
+        //tvDB = view.findViewById(R.id.tvDB);
 
         btnStartStop.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                //getAndSetGPSLocation();
+                getAndSetGPSLocation();
 
-                //Below is just for debugging purposes
+                /*//Below is just for debugging purposes
                 Cursor data = databaseHelper.getData();
                 HashMap<String, ArrayList<Shot>> shots = new HashMap<>();
                 tvDB.setText("");
@@ -80,7 +80,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                     }
                 }
                 tvDB.append(shots.toString());
-                //Debugging purposes above
+                //Debugging purposes above*/
             }
         });
 

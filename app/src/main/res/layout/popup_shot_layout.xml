@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
-        android:layout_height="200dp" xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="250dp" xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="350dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:orientation="vertical"
-            android:layout_width="350dp"
-            android:layout_height="200dp"
+            android:layout_width="300dp"
+            android:layout_height="250dp"
             android:background="@drawable/popup_shot_background">
 
         <Button
@@ -15,10 +15,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btnDeleteShot"
+                android:background="@drawable/button_background"
+                android:minHeight="40dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.95"
-                app:layout_constraintVertical_bias="0.95"/>
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.94"
+                app:layout_constraintVertical_bias="0.95" android:textSize="14sp"/>
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" app:srcCompat="@android:drawable/btn_dialog"
@@ -32,16 +34,32 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/tvPopupTitle" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.08"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintHorizontal_bias="0.05"
                 app:layout_constraintVertical_bias="0.050000012" android:textSize="24sp" android:textStyle="bold"/>
-        <TextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvPopupBody"
-                app:layout_constraintTop_toBottomOf="@+id/tvPopupTitle" app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintVertical_bias="0.25" android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.1"/>
+
+        <ScrollView
+                android:layout_width="275dp"
+                android:layout_height="140dp" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" android:id="@+id/scrollView2"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvPopupBody"
+                        app:layout_constraintTop_toBottomOf="@+id/tvPopupTitle"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintVertical_bias="0.25" android:textSize="18sp"
+                        app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.1"/>
+
+            </LinearLayout>
+        </ScrollView>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

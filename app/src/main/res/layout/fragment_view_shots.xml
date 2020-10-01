@@ -20,7 +20,9 @@
                 android:id="@+id/spinner_clubs_graph5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_gravity="center"
+                style="@style/spinner_style"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toTopOf="@+id/scrollView2"
                 app:layout_constraintTop_toTopOf="parent"/>
 
@@ -70,9 +72,11 @@
                 android:text="@string/delete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@drawable/button_background"
+                android:minHeight="40dp"
                 android:id="@+id/btnDelete5" app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/scrollView2" app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent" android:textSize="14sp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

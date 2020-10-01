@@ -25,11 +25,11 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-//TODO: Splash Screen
-//TODO: Long notes doesnt fit in popup box AND doesnt fit in homepage
+//TODO: Long notes doesnt fit in homepage
 //TODO: Instead of pieChart for ball flight, have animation of ball actually travelling the flight and show percentages of each flight
-//TODO: Set spinner selection from linechart fragment to piechart fragment
-//TODO: ScrollView with both charts on one page. Then can set spinner for each graph and set spinner to 0 when going back to main screen
+//TODO: Add mandatory course and hole input fields and automatically add date for each shot which is displayed on popup
+//TODO: Semi-circle animation around the yards textview when calculating the yardage.
+// Also make it count up to the yardage instead of displaying it right away
 
 public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSelectedListener, OnChartValueSelectedListener {
 
@@ -37,8 +37,6 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     private Spinner spinnerClubs;
     private String club;
     private Button btnDelete;
-    private ArrayList<Entry> shotsDisplayedOnGraph;
-    private ArrayList<Integer> shotsPerClub;
     private boolean preventSelectClubToast = false;
 
     private LineChart lineChart;
@@ -247,9 +245,9 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         }
 
         if(club.contains("Select Club:")){
-            tvPieChartTitle.setText("\nAll Clubs Ball Flight\n");
+            tvPieChartTitle.setText("\nBall Flights for All Clubs\n");
         } else{
-            tvPieChartTitle.setText("\n" + club + " Ball Flights\n");
+            tvPieChartTitle.setText("\nBall Flights\n");
         }
 
         pieChart.setUsePercentValues(true);
