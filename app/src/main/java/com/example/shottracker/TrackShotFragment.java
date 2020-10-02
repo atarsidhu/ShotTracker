@@ -5,6 +5,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.*;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
@@ -28,6 +29,8 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     private RadioGroup radioGroup;
     private String club, ballFlight;
     private double yards;
+    private int countingYards = 0;
+    private int countingTenthOfAYard = 0;
 
     private DatabaseHelper databaseHelper;
     private Cursor cursor;
@@ -63,7 +66,8 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                getAndSetGPSLocation();
+                //getAndSetGPSLocation();
+                displayYardage();
 
                 /*//Below is just for debugging purposes
                 Cursor data = databaseHelper.getData();
@@ -163,7 +167,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
 
             if(endingLatitude != 0.0 && endingLongitude != 0.0) {
                 yards = calculateDistance(startingLatitude, startingLongitude, endingLatitude, endingLongitude);
-                tvDistance.setText(String.format("%.1f yards", yards));
+                tvDistance.setText(String.format("%.1f \nyards", yards));
             }
         }
     }
@@ -184,6 +188,53 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
 
         //Convert to yards and return
         return earthRadius * 1093.613 * c;
+    }
+
+    private void displayYardage(){
+        yards = 200.8;
+        String[] decimal = String.valueOf(yards).split("\\.");
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                if(countingYards < (yards * .97)) {
+                    countingYards++;
+
+                    if(countingTenthOfAYard <= 8)
+                        countingTenthOfAYard++;
+                    else
+                        countingTenthOfAYard = 0;
+
+                    handler.postDelayed(this, 10);
+                } else if(countingYards < yards - 1){
+                    if(countingTenthOfAYard <= 8)
+                        countingTenthOfAYard++;
+                    else {
+                        countingYards++;
+                        countingTenthOfAYard = 0;
+                    }
+
+                    handler.postDelayed(this, 100);
+                } else if(countingYards == Math.floor(yards)){
+                    handler.postDelayed(this, 250);
+                    int firstDecimalNumber = Integer.parseInt(String.valueOf(decimal[1].charAt(0)));
+
+                    if(countingTenthOfAYard < firstDecimalNumber)
+                        countingTenthOfAYard++;
+                    else {
+                        handler.removeCallbacksAndMessages(null);
+                    }
+
+                } else
+                    handler.removeCallbacksAndMessages(null);
+
+                tvDistance.setText(countingYards + "." + countingTenthOfAYard + "\nyards");
+            }
+        };
+
+        handler.post(runnable);
+        countingYards = 0;
+        countingTenthOfAYard = 0;
     }
 
     @Override

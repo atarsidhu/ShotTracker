@@ -30,6 +30,7 @@ import java.util.HashMap;
 //TODO: Add mandatory course and hole input fields and automatically add date for each shot which is displayed on popup
 //TODO: Semi-circle animation around the yards textview when calculating the yardage.
 // Also make it count up to the yardage instead of displaying it right away
+//TODO: Are you sure popup for deleting shots
 
 public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSelectedListener, OnChartValueSelectedListener {
 

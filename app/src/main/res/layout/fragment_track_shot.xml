@@ -4,124 +4,127 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context=".TrackShotFragment">
-<androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+    <androidx.constraintlayout.motion.widget.MotionLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" android:id="@+id/constraintLayout"
+            app:layoutDescription="@xml/fragment_track_shot_scene">
 
-    <RadioGroup
-            android:id="@+id/radioGroup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-        <RadioButton
-                android:id="@+id/rbHook"
+        <RadioGroup
+                android:id="@+id/radioGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/hook"
-                android:buttonTint="@color/colorPrimary"/>
-        <RadioButton
-                android:id="@+id/rbDraw"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                    android:id="@+id/rbHook"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/hook"
+                    android:buttonTint="@color/colorPrimary"/>
+            <RadioButton
+                    android:id="@+id/rbDraw"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/draw"
+                    android:buttonTint="@color/colorPrimary"/>
+            <RadioButton
+                    android:id="@+id/rbStraight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/straight"
+                    android:checked="true"
+                    android:buttonTint="@color/colorPrimary"/>
+            <RadioButton
+                    android:id="@+id/rbFade"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fade"
+                    android:buttonTint="@color/colorPrimary"/>
+
+            <RadioButton
+                    android:id="@+id/rbSlice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/slice"
+                    android:buttonTint="@color/colorPrimary"/>
+
+
+        </RadioGroup>
+
+        <androidx.appcompat.widget.AppCompatSpinner
+                android:id="@+id/spinner_clubs"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/draw"
-                android:buttonTint="@color/colorPrimary"/>
-        <RadioButton
-                android:id="@+id/rbStraight"
+                style="@style/spinner_style"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.39"/>
+
+        <Button
+                android:text="@string/startTracker"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/straight"
-                android:checked="true"
-                android:buttonTint="@color/colorPrimary"/>
-        <RadioButton
-                android:id="@+id/rbFade"
+                android:id="@+id/btnStartStop"
+                android:background="@drawable/button_background"
+                android:minHeight="40dp"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintVertical_bias="0.85" android:textSize="14sp"/>
+        <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/fade"
-                android:buttonTint="@color/colorPrimary"/>
-
-        <RadioButton
-                android:id="@+id/rbSlice"
+                android:id="@+id/tvCoordinates" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@+id/btnStartStop"
+                app:layout_constraintVertical_bias="0.75" app:layout_constraintHorizontal_bias="0.22"/>
+        <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/slice"
-                android:buttonTint="@color/colorPrimary"/>
-
-
-    </RadioGroup>
-
-    <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/spinner_clubs"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/spinner_style"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.39"/>
-
-    <Button
-            android:text="@string/startTracker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnStartStop"
-            android:background="@drawable/button_background"
-            android:minHeight="40dp"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.85" android:textSize="14sp"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvCoordinates" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toBottomOf="@+id/btnStartStop"
-            app:layout_constraintVertical_bias="0.75" app:layout_constraintHorizontal_bias="0.22"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvDistance" app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toTopOf="@+id/btnStartStop"
-            app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.25"
-            android:textSize="36sp" android:textStyle="bold" android:text="0 yards"/>
-    <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvNotes" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent" android:hint="@string/notesHint"
-            app:layout_constraintVertical_bias="0.65999997"/>
-    <TextView
-            android:text="@string/notes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvNotesTitle" app:layout_constraintStart_toStartOf="@+id/tvNotes"
-            app:layout_constraintEnd_toEndOf="@+id/tvNotes" app:layout_constraintBottom_toTopOf="@+id/tvNotes"
-            app:layout_constraintHorizontal_bias="0.01" android:textSize="24sp" android:textStyle="bold"/>
-    <Button
-            android:text="@string/saveShot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnSaveShot"
-            android:background="@drawable/button_background"
-            android:minHeight="40dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btnStartStop" app:layout_constraintVertical_bias="0.050000012"
-            android:textSize="14sp"/>
-    <!--    <TextView
+                android:id="@+id/tvDistance" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toTopOf="@+id/btnStartStop"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.25"
+                android:textSize="36sp" android:textStyle="bold" android:text="0 yards"/>
+        <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvNotes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" android:hint="@string/notesHint"
+                app:layout_constraintVertical_bias="0.65999997"/>
+        <TextView
+                android:text="@string/notes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvNotesTitle" app:layout_constraintStart_toStartOf="@+id/tvNotes"
+                app:layout_constraintEnd_toEndOf="@+id/tvNotes" app:layout_constraintBottom_toTopOf="@+id/tvNotes"
+                app:layout_constraintHorizontal_bias="0.01" android:textSize="24sp" android:textStyle="bold"/>
+        <Button
+                android:text="@string/saveShot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnSaveShot"
+                android:background="@drawable/button_background"
+                android:minHeight="40dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnStartStop" app:layout_constraintVertical_bias="0.050000012"
+                android:textSize="14sp"/>
+        <ImageView
+                android:src="@drawable/golfball1"
+                android:layout_width="35dp"
+                android:layout_height="35dp" android:id="@+id/imgGolfBall" tools:layout_editor_absoluteY="208dp"
+                tools:layout_editor_absoluteX="283dp"/>
+        <!--    <TextView
                 android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvDB" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/tvDistance"/>-->
-</androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
-
+    </androidx.constraintlayout.motion.widget.MotionLayout>
 </FrameLayout>
