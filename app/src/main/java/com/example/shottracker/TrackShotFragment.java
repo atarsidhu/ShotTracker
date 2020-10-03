@@ -1,6 +1,7 @@
 package com.example.shottracker;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -31,6 +32,9 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     private double yards;
     private int countingYards = 0;
     private int countingTenthOfAYard = 0;
+    private int avgDistance;
+    int red;
+    int green;
 
     private DatabaseHelper databaseHelper;
     private Cursor cursor;
@@ -191,7 +195,10 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     }
 
     private void displayYardage(){
-        yards = 200.8;
+        yards = 265.3;
+        avgDistance = 240;
+        red = 255;
+        green = 0;
         String[] decimal = String.valueOf(yards).split("\\.");
         final Handler handler = new Handler();
         Runnable runnable = new Runnable() {
@@ -228,6 +235,52 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                 } else
                     handler.removeCallbacksAndMessages(null);
 
+
+                //Ask user for avg distance, then get that distance and replace it with yards below
+                if(countingYards < avgDistance * .3) {
+                    //tvDistance.setTextColor(getResources().getColor(R.color.red, null));
+                    if(green < 64)
+                        green++;
+                } else if(countingYards >= avgDistance * .3 && countingYards < avgDistance * .5) {
+                    //tvDistance.setTextColor(getResources().getColor(R.color.orange, null));
+                    if(green < 64)
+                        green = 64;
+
+                    if(green < 128)
+                        green++;
+                } else if(countingYards >= avgDistance * .5 && countingYards < avgDistance * .7) {
+                    //tvDistance.setTextColor(getResources().getColor(R.color.lightOrange, null));
+                    if(green < 128)
+                        green = 128;
+
+                    if(green < 191)
+                        green++;
+
+                } else if(countingYards >= avgDistance * .7 && countingYards < avgDistance * .9) {
+                    //tvDistance.setTextColor(getResources().getColor(R.color.orangeYellow, null));
+                    if(green < 255)
+                        green++;
+
+                    red -= 1;
+                } else if(countingYards >= avgDistance * .9 && countingYards <= avgDistance) {
+                    //tvDistance.setTextColor(getResources().getColor(R.color.yellow, null));
+                    if(red > 180)
+                        red = 180;
+
+                    red -= 1;
+                } else if(countingYards > avgDistance && countingYards < avgDistance * 1.05) {
+                    //tvDistance.setTextColor(getResources().getColor(R.color.yellowGreen, null));
+                    if(red > 130)
+                        red = 130;
+
+                    red -= 10;
+                } else if(countingYards >= avgDistance * 1.05) {
+                    //tvDistance.setTextColor(getResources().getColor(R.color.green, null));
+                    red = 64;
+                    green = 255;
+                }
+
+                tvDistance.setTextColor(Color.rgb(red, green, 0));
                 tvDistance.setText(countingYards + "." + countingTenthOfAYard + "\nyards");
             }
         };
