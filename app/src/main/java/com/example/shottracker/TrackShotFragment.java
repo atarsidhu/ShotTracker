@@ -13,32 +13,25 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 
 
 public class TrackShotFragment extends Fragment implements AdapterView.OnItemSelectedListener {
 
     private Button btnStartStop, btnSaveShot;
-    private TextView tvCoordinates, tvDistance;
+    private TextView tvDistance;
     private EditText tvNotes;
     private double startingLatitude = 0.0;
     private double startingLongitude = 0.0;
     private double endingLatitude = 0.0;
     private double endingLongitude = 0.0;
-    private Spinner spinner;
-    private RadioGroup radioGroup;
     private String club, ballFlight;
     private double yards;
     private int countingYards = 0;
     private int countingTenthOfAYard = 0;
-    private int avgDistance;
-    int red;
-    int green;
+    private int avgDistance, red, green;
 
     private DatabaseHelper databaseHelper;
-    private Cursor cursor;
-    //private TextView tvDB;
 
     public TrackShotFragment() {
         // Required empty public constructor
@@ -50,11 +43,10 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         View view = inflater.inflate(R.layout.fragment_track_shot, container, false);
         btnStartStop = view.findViewById(R.id.btnStartStop);
         btnSaveShot = view.findViewById(R.id.btnSaveShot);
-        tvCoordinates = view.findViewById(R.id.tvCoordinates);
         tvNotes = view.findViewById(R.id.tvNotes);
         tvDistance = view.findViewById(R.id.tvDistance);
-        spinner = view.findViewById(R.id.spinner_clubs);
-        radioGroup = view.findViewById(R.id.radioGroup);
+        Spinner spinner = view.findViewById(R.id.spinner_clubs);
+        RadioGroup radioGroup = view.findViewById(R.id.radioGroup);
 
         //Spinner
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getContext(), R.array.clubs, android.R.layout.simple_spinner_item);
@@ -64,31 +56,19 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
 
         //Database
         databaseHelper = new DatabaseHelper(getContext());
-        //tvDB = view.findViewById(R.id.tvDB);
 
         btnStartStop.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                //getAndSetGPSLocation();
-                displayYardage();
-
-                /*//Below is just for debugging purposes
-                Cursor data = databaseHelper.getData();
-                HashMap<String, ArrayList<Shot>> shots = new HashMap<>();
-                tvDB.setText("");
-
-                if(data.getCount() == 0)
-                    Toast.makeText(getContext(), "No shots saved!", Toast.LENGTH_SHORT).show();
-                else{
-                    while(data.moveToNext()){
-                        shots.putIfAbsent(data.getString(1), new ArrayList<>());
-                        shots.get(data.getString(1)).add(new Shot(data.getString(1), data.getFloat(2), data.getString(3), data.getString(4)));
-                        tvDB.append("\nID: " + data.getString(0));
-                    }
-                }
-                tvDB.append(shots.toString());
-                //Debugging purposes above*/
+                if(club.equals("Select Club:"))
+                    Toast.makeText(getContext(), "Please select a club.", Toast.LENGTH_LONG).show();
+                else
+                    getAndSetGPSLocation();
+                /*if(club.equals("Select Club:"))
+                    Toast.makeText(getContext(), "Please select a club.", Toast.LENGTH_LONG).show();
+                else
+                    displayYardage();*/
             }
         });
 
@@ -102,15 +82,16 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                     if(ballFlight == null)
                         ballFlight = "Straight";
 
-                    //addData(club, yards, ballFlight, tvNotes.getText().toString());
+                    addData(club, yards, ballFlight, tvNotes.getText().toString());
 
+                    /*Add shots to test components
                     addData(club, 213.11, "Straight", tvNotes.getText().toString());
                     addData(club, 228.9, "Draw", tvNotes.getText().toString());
                     addData(club, 230.0, "Hook", tvNotes.getText().toString());
                     addData(club, 230.1, "Slice", tvNotes.getText().toString());
                     addData(club, 220.8, "Fade", tvNotes.getText().toString());
                     addData(club, 230.9, "Draw", tvNotes.getText().toString());
-                    addData(club, 223.9, "Slice", tvNotes.getText().toString());
+                    addData(club, 223.9, "Slice", tvNotes.getText().toString());*/
 
                 }
             }
@@ -142,6 +123,13 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         return view;
     }
 
+    /**
+     * Adds the shot with the specified parameters to the database
+     * @param club the club used
+     * @param distance how far the ball goes
+     * @param ballFlight the flight of the ball
+     * @param notes additional notes
+     */
     private void addData(String club, Double distance, String ballFlight, String notes){
         boolean insertData = databaseHelper.addData(club, distance, ballFlight, notes);
 
@@ -151,6 +139,9 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
             Toast.makeText(getContext(), "Shot not saved", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Gets the current GPS location of the user
+     */
     private void getAndSetGPSLocation(){
         GPSTracker gpsTracker = new GPSTracker(getContext());
         Location location = gpsTracker.getLocation();
@@ -162,13 +153,11 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                 endingLongitude = 0.0;
                 endingLatitude = 0.0;
                 btnStartStop.setText(R.string.stopTracker);
-                tvCoordinates.setText(startingLatitude + " " + startingLongitude + "\n");
                 tvDistance.setText("0 yards");
             } else{
                 endingLatitude = location.getLatitude();
                 endingLongitude = location.getLongitude();
                 btnStartStop.setText(R.string.startTracker);
-                tvCoordinates.append(endingLatitude + " " + endingLongitude + "\n");
             }
 
             if(endingLatitude != 0.0 && endingLongitude != 0.0) {
@@ -179,6 +168,15 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         }
     }
 
+    /**
+     * Calculates the distance between the first and second GPS locations that the user requested and returns the
+     * answer as the number of yards the ball has travelled.
+     * @param startingLatitude
+     * @param startingLongitude
+     * @param endingLatitude
+     * @param endingLongitude
+     * @return
+     */
     private double calculateDistance(double startingLatitude, double startingLongitude, double endingLatitude, double endingLongitude){
         double earthRadius = 6371;
 
@@ -197,12 +195,16 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         return earthRadius * 1093.613 * c;
     }
 
+    /**
+     * Displays the yardage on the screen
+     */
     private void displayYardage(){
         yards = 260.3;
-        avgDistance = 260;
         red = 255;
         green = 0;
         String[] decimal = String.valueOf(yards).split("\\.");
+        computeAverageDistancePerClub();
+
         final Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
@@ -241,18 +243,15 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
 
                 //Ask user for avg distance, then get that distance and replace it with yards below
                 if(countingYards < avgDistance * .3) {
-                    //tvDistance.setTextColor(getResources().getColor(R.color.red, null));
                     if(green < 64)
                         green++;
                 } else if(countingYards >= avgDistance * .3 && countingYards < avgDistance * .5) {
-                    //tvDistance.setTextColor(getResources().getColor(R.color.orange, null));
                     if(green < 64)
                         green = 64;
 
                     if(green < 128)
                         green++;
                 } else if(countingYards >= avgDistance * .5 && countingYards < avgDistance * .7) {
-                    //tvDistance.setTextColor(getResources().getColor(R.color.lightOrange, null));
                     if(green < 128)
                         green = 128;
 
@@ -260,13 +259,11 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                         green++;
 
                 } else if(countingYards >= avgDistance * .7 && countingYards < avgDistance * .9) {
-                    //tvDistance.setTextColor(getResources().getColor(R.color.orangeYellow, null));
                     if(green < 255)
                         green++;
 
                     red -= 1;
                 } else if(countingYards >= avgDistance * .9 && countingYards < avgDistance) {
-                    //tvDistance.setTextColor(getResources().getColor(R.color.yellow, null));
                     if(red > 160)
                         red = 160;
                     else if(red > 1)
@@ -275,7 +272,6 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                     if(green < 255)
                         green++;
                 } else if(countingYards >= avgDistance && countingYards < avgDistance * 1.05) {
-                    //tvDistance.setTextColor(getResources().getColor(R.color.yellowGreen, null));
                     if(red > 110)
                         red = 110;
                     else if(red > 5)
@@ -284,9 +280,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                     if(green < 255)
                         green++;
 
-                    //red -= 10; // PUSH CHANGES TO GITHUB RIGHT AWAY. WITHOUT COMMITTING I THINK
                 } else if(countingYards >= avgDistance * 1.05) {
-                    //tvDistance.setTextColor(getResources().getColor(R.color.green, null));
                     red = 64;
                     green = 255;
                 }
@@ -299,6 +293,25 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
         handler.post(runnable);
         countingYards = 0;
         countingTenthOfAYard = 0;
+    }
+
+    /**
+     * Calculates the average distance the ball has travelled with the selected club.
+     */
+    public void computeAverageDistancePerClub(){
+        avgDistance = 0;
+        int num = 0;
+        Cursor cursor = databaseHelper.getData();
+
+        while(cursor.moveToNext()){
+            if(cursor.getString(1).contains(club)){
+                avgDistance += cursor.getFloat(2);
+                num++;
+            }
+        }
+
+        if(avgDistance != 0)
+            avgDistance /= num;
     }
 
     @Override

@@ -36,11 +36,12 @@
     <!-- View Shot -->
     <string name="delete">Delete All Shots</string>
     <string name="noShotsSaved">No %1s shots saved</string>
+    <string name="shotSelectedInformation">Club: %1$s\nDistance: %2$s\nBall Flight: %3$s\nNotes: %4$s</string>
 
     <!-- Misc -->
     <string name="deleteShot">Delete Shot</string>
     <string name="confirmDeletion">Confirm Deletion</string>
-    <string name="deleteMsgAll">Are you sure you want to permanently delete all shots from the database?</string>
+    <string name="deleteMsgAll">Are you sure you want to permanently delete <b>ALL</b> shots from the database?</string>
     <string name="deleteMsgOne">Are you sure you want to permanently delete this shot from the database?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>

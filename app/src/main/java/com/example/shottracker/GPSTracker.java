@@ -17,6 +17,10 @@ public class GPSTracker implements LocationListener {
         context = c;
     }
 
+    /**
+     * Gets the current GPS location of the user.
+     * @return location
+     */
     public Location getLocation(){
         // If permission is not granted
         if(ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){

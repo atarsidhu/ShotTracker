@@ -50,20 +50,6 @@ public class ShotPopup extends DialogFragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                /*Cursor data = databaseHelper.getData();
-                int deletedRow = 0;
-                while (data.moveToNext()) {
-                    if(data.getString(0).equals(idOfShot)) {
-                        deletedRow = databaseHelper.deleteShot(args.getString("ID"));
-                    }
-                }
-                if(deletedRow > 0)
-                    Toast.makeText(getContext(), "Shot deleted!", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(getContext(), "Shot not deleted!", Toast.LENGTH_SHORT).show();
-
-                dismiss();*/
-
                 dismiss();
 
                 DeletePopup deletePopup = new DeletePopup();

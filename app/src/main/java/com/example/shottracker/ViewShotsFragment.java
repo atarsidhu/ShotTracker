@@ -11,8 +11,6 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -25,24 +23,14 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-//TODO: Long notes doesnt fit in homepage
-//TODO: Instead of pieChart for ball flight, have animation of ball actually travelling the flight and show percentages of each flight
-//TODO: Add mandatory course and hole input fields and automatically add date for each shot which is displayed on popup
-//TODO: Are you sure popup for deleting shots
-
 public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSelectedListener, OnChartValueSelectedListener {
 
-    private TextView tvShowShot, tvPieChartTitle;
+    private TextView tvPieChartTitle;
     private Spinner spinnerClubs;
     private String club;
-    private Button btnDelete;
-    private boolean preventSelectClubToast = false;
 
     private LineChart lineChart;
     private PieChart pieChart;
-
-    private ViewPager viewPager;
-    private PagerAdapter pagerAdapter;
 
     private DatabaseHelper databaseHelper;
     Cursor data;
@@ -57,7 +45,7 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_shots, container, false);
         tvPieChartTitle = view.findViewById(R.id.tvPieChartTitle);
-        btnDelete = view.findViewById(R.id.btnDelete5);
+        Button btnDelete = view.findViewById(R.id.btnDelete5);
         spinnerClubs = view.findViewById(R.id.spinner_clubs_graph5);
 
         lineChart = view.findViewById(R.id.lineChart5);
@@ -73,25 +61,9 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         //DB
         databaseHelper = new DatabaseHelper(getContext());
 
-        //Charts
-        /*ArrayList<Fragment> fragments = new ArrayList<>();
-        fragments.add(new LineChartDistance());
-        fragments.add(new PieChartBallFlight());
-        viewPager = view.findViewById(R.id.viewPager2);
-        pagerAdapter = new SlidePagerAdapter(getFragmentManager(), fragments);
-        viewPager.setAdapter(pagerAdapter);*/
-
-        //setAndDisplayLineChart();
-
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*if(databaseHelper.deleteData()) {
-                    Toast.makeText(getContext(), "Data deleted!", Toast.LENGTH_SHORT).show();
-                    spinnerClubs.setSelection(0);
-                } else
-                    Toast.makeText(getContext(), "Data not deleted " + data.getCount(), Toast.LENGTH_SHORT).show();*/
-
                 DeletePopup deletePopup = new DeletePopup();
                 Bundle args = new Bundle();
                 args.putString("ALL_OR_ONE", "all");
@@ -106,8 +78,7 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public void setMenuVisibility(boolean menuVisible) {
         super.setMenuVisibility(menuVisible);
-        if(isVisible()) { //menuVisible?
-            //preventSelectClubToast = true;
+        if(isVisible()) {
             spinnerClubs.setSelection(0);
         }
     }
@@ -117,14 +88,6 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         club = parent.getItemAtPosition(position).toString();
 
-        /*if(isMenuVisible()) {
-            if(!preventSelectClubToast) {
-                Toast.makeText(getContext(), "Please select a club", Toast.LENGTH_SHORT).show();
-                preventSelectClubToast = false;
-            }
-            setAndDisplayLineChart();
-        }*/
-
         setAndDisplayLineChart();
         setAndDisplayPieChart();
 
@@ -133,6 +96,9 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     @Override
     public void onNothingSelected(AdapterView<?> parent) { }
 
+    /**
+     * Creates and populates the Line Chart depending on the club selected.
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void setAndDisplayLineChart(){
         ArrayList<Entry> shotsDisplayedOnGraph = new ArrayList<>();
@@ -163,8 +129,6 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         set1.setFillAlpha(110);
         set1.setColor(getResources().getColor(R.color.colorPrimary));
         set1.setLineWidth(3);
-        //set1.setValueTextSize(10);
-        //set1.setValueTextColor(Color.GRAY);
         set1.setDrawValues(false);
         set1.setDrawCircleHole(false);
         set1.setCircleRadius(5);
@@ -196,6 +160,9 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         lineChart.invalidate();
     }
 
+    /**
+     * Creates and populates the Pie Chart based on the club selected.
+     */
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void setAndDisplayPieChart(){
         ArrayList<PieEntry> shotFlightsDisplayedOnGraph = new ArrayList<>();
@@ -235,17 +202,13 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
                 }
             }
 
-            for(String s: ballFlight.keySet()){
+            for(String s: ballFlight.keySet())
                 shotFlightsDisplayedOnGraph.add(new PieEntry(ballFlight.get(s), s));
-            }
-            //shotFlightsDisplayedOnGraph.add(new PieEntry(hook, data.getString(3)));
         }
 
         if(ballFlight.isEmpty()){
             if(isVisible() && !club.contains("Select Club:"))
                 Toast.makeText(getContext(), "No " + club + " shots saved", Toast.LENGTH_SHORT).show();
-
-            //shotFlightsDisplayedOnGraph.add(new PieEntry(1, "No " + club + " shots saved"));
         }
 
         if(club.contains("Select Club:")){
@@ -261,7 +224,6 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         pieChart.setTransparentCircleRadius(0);
         pieChart.setEntryLabelColor(Color.BLACK);
         pieChart.getLegend().setEnabled(false);
-        //pieChart.setExtraOffsets(5, 10, 5, 5); // Moves piechart
 
         PieDataSet dataSet = new PieDataSet(shotFlightsDisplayedOnGraph, "Ball Flight");
         dataSet.setSliceSpace(1);
@@ -275,7 +237,6 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         pieChart.invalidate();
     }
 
-    //Chart
     @Override
     public void onValueSelected(Entry e, Highlight h) {
         if(data != null) {
@@ -288,8 +249,8 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
                     float distInDatabase = data.getFloat(2);
                     if (e.getY() == distInDatabase) {
                         id = data.getString(0);
-                        message = "Club: " + data.getString(1) + "\nDistance: " + String.format("%.1f yards", data.getFloat(2))
-                                + "\nBall Flight: " + data.getString(3) + "\nNotes: " + data.getString(4);
+                        message = getString(R.string.shotSelectedInformation, data.getString(1),
+                                String.format("%.1f yards", data.getFloat(2)), data.getString(3), data.getString(4));
 
                     }
                 } while (data.moveToNext());
