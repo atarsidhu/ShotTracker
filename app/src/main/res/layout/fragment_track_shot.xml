@@ -4,10 +4,9 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              tools:context=".TrackShotFragment">
-    <androidx.constraintlayout.motion.widget.MotionLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:id="@+id/constraintLayout"
-            app:layoutDescription="@xml/fragment_track_shot_scene">
+            android:layout_height="match_parent" android:id="@+id/constraintLayout">
 
         <RadioGroup
                 android:id="@+id/radioGroup"
@@ -87,7 +86,7 @@
                 android:id="@+id/tvDistance" app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toTopOf="@+id/btnStartStop"
                 app:layout_constraintTop_toTopOf="parent" app:layout_constraintVertical_bias="0.25"
-                android:textSize="36sp" android:textStyle="bold" android:text="0 yards"/>
+                android:textSize="48sp" android:textStyle="bold" android:text="0 yards"/>
         <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -114,11 +113,6 @@
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/btnStartStop" app:layout_constraintVertical_bias="0.050000012"
                 android:textSize="14sp"/>
-        <ImageView
-                android:src="@drawable/golfball1"
-                android:layout_width="35dp"
-                android:layout_height="35dp" android:id="@+id/imgGolfBall" tools:layout_editor_absoluteY="208dp"
-                tools:layout_editor_absoluteX="283dp"/>
         <!--    <TextView
                 android:text="TextView"
                 android:layout_width="wrap_content"
@@ -126,5 +120,5 @@
                 android:id="@+id/tvDB" app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/tvDistance"/>-->
-    </androidx.constraintlayout.motion.widget.MotionLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

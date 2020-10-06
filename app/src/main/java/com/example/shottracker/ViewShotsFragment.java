@@ -28,8 +28,6 @@ import java.util.HashMap;
 //TODO: Long notes doesnt fit in homepage
 //TODO: Instead of pieChart for ball flight, have animation of ball actually travelling the flight and show percentages of each flight
 //TODO: Add mandatory course and hole input fields and automatically add date for each shot which is displayed on popup
-//TODO: Semi-circle animation around the yards textview when calculating the yardage.
-// Also make it count up to the yardage instead of displaying it right away
 //TODO: Are you sure popup for deleting shots
 
 public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSelectedListener, OnChartValueSelectedListener {
@@ -58,7 +56,6 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_view_shots, container, false);
-        tvShowShot = view.findViewById(R.id.tvShowShot);
         tvPieChartTitle = view.findViewById(R.id.tvPieChartTitle);
         btnDelete = view.findViewById(R.id.btnDelete5);
         spinnerClubs = view.findViewById(R.id.spinner_clubs_graph5);
@@ -89,11 +86,17 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(databaseHelper.deleteData()) {
+                /*if(databaseHelper.deleteData()) {
                     Toast.makeText(getContext(), "Data deleted!", Toast.LENGTH_SHORT).show();
                     spinnerClubs.setSelection(0);
                 } else
-                    Toast.makeText(getContext(), "Data not deleted " + data.getCount(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Data not deleted " + data.getCount(), Toast.LENGTH_SHORT).show();*/
+
+                DeletePopup deletePopup = new DeletePopup();
+                Bundle args = new Bundle();
+                args.putString("ALL_OR_ONE", "all");
+                deletePopup.setArguments(args);
+                deletePopup.show(getFragmentManager(), "Fragment");
             }
         });
 
@@ -160,9 +163,9 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         set1.setFillAlpha(110);
         set1.setColor(getResources().getColor(R.color.colorPrimary));
         set1.setLineWidth(3);
-        set1.setValueTextSize(10);
-        set1.setValueTextColor(Color.GRAY);
-        //set1.setDrawValues(false);
+        //set1.setValueTextSize(10);
+        //set1.setValueTextColor(Color.GRAY);
+        set1.setDrawValues(false);
         set1.setDrawCircleHole(false);
         set1.setCircleRadius(5);
         set1.setCircleColor(getResources().getColor(R.color.colorPrimaryDark));
@@ -171,7 +174,7 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         dataSets.add(set1);
         LineData lineData = new LineData(dataSets);
 
-        lineChart.setDragEnabled(false);
+        lineChart.setDragEnabled(true);
         lineChart.setScaleEnabled(true);
         lineChart.setMaxHighlightDistance(30);
         lineChart.setPinchZoom(true);
@@ -257,6 +260,7 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
         pieChart.setHoleRadius(0);
         pieChart.setTransparentCircleRadius(0);
         pieChart.setEntryLabelColor(Color.BLACK);
+        pieChart.getLegend().setEnabled(false);
         //pieChart.setExtraOffsets(5, 10, 5, 5); // Moves piechart
 
         PieDataSet dataSet = new PieDataSet(shotFlightsDisplayedOnGraph, "Ball Flight");
@@ -284,7 +288,7 @@ public class ViewShotsFragment extends Fragment implements AdapterView.OnItemSel
                     float distInDatabase = data.getFloat(2);
                     if (e.getY() == distInDatabase) {
                         id = data.getString(0);
-                        message = "ID: " + id + "\nClub: " + data.getString(1) + "\nDistance: " + String.format("%.1f yards", data.getFloat(2))
+                        message = "Club: " + data.getString(1) + "\nDistance: " + String.format("%.1f yards", data.getFloat(2))
                                 + "\nBall Flight: " + data.getString(3) + "\nNotes: " + data.getString(4);
 
                     }

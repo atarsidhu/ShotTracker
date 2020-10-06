@@ -9,27 +9,34 @@
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent" >
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/tvShowShot"
-                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.060000002" app:layout_constraintHorizontal_bias="0.19"/>
 
         <androidx.appcompat.widget.AppCompatSpinner
                 android:id="@+id/spinner_clubs_graph5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 style="@style/spinner_style"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toTopOf="@+id/scrollView2"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.15"/>
+
+
+        <Button
+                android:text="@string/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_background"
+                android:minHeight="40dp"
+                android:id="@+id/btnDelete5"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="12sp"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintHorizontal_bias="0.9"/>
 
         <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="475dp" app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent" android:id="@+id/scrollView2">
+                android:layout_height="545dp" app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent" android:id="@+id/scrollView2"
+                app:layout_constraintVertical_bias="1.0">
 
             <LinearLayout
                     android:orientation="vertical"
@@ -45,7 +52,7 @@
 
                 <com.github.mikephil.charting.charts.LineChart
                         android:layout_width="match_parent"
-                        android:layout_height="350dp"
+                        android:layout_height="300dp"
                         android:id="@+id/lineChart5"
                         android:layout_gravity="center">
                 </com.github.mikephil.charting.charts.LineChart>
@@ -55,7 +62,7 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/tvPieChartTitle"
                         android:layout_gravity="center"
-                        android:textSize="20sp" />
+                        android:textSize="20sp"/>
 
                 <com.github.mikephil.charting.charts.PieChart
                         android:layout_width="match_parent"
@@ -67,16 +74,6 @@
             </LinearLayout>
 
         </ScrollView>
-
-        <Button
-                android:text="@string/delete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_background"
-                android:minHeight="40dp"
-                android:id="@+id/btnDelete5" app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/scrollView2" app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" android:textSize="14sp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

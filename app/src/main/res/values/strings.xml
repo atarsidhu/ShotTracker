@@ -39,4 +39,9 @@
 
     <!-- Misc -->
     <string name="deleteShot">Delete Shot</string>
+    <string name="confirmDeletion">Confirm Deletion</string>
+    <string name="deleteMsgAll">Are you sure you want to permanently delete all shots from the database?</string>
+    <string name="deleteMsgOne">Are you sure you want to permanently delete this shot from the database?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

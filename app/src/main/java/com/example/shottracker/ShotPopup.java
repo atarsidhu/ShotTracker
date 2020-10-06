@@ -8,10 +8,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -22,7 +19,7 @@ public class ShotPopup extends DialogFragment {
     private TextView tvTitle, tvBody;
     private ImageView ivExit;
     private Button btnDeleteShot;
-    DatabaseHelper databaseHelper;
+    private DatabaseHelper databaseHelper;
 
     @Nullable
     @Override
@@ -39,7 +36,7 @@ public class ShotPopup extends DialogFragment {
 
         Bundle args = getArguments();
         String idOfShot = args.getString("ID");
-        tvTitle.setText(args.getString("TITLE"));
+        //tvTitle.setText(args.getString("TITLE"));
         tvBody.setText(args.getString("SHOT"));
 
         ivExit.setOnClickListener(new View.OnClickListener() {
@@ -53,7 +50,7 @@ public class ShotPopup extends DialogFragment {
             @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onClick(View v) {
-                Cursor data = databaseHelper.getData();
+                /*Cursor data = databaseHelper.getData();
                 int deletedRow = 0;
                 while (data.moveToNext()) {
                     if(data.getString(0).equals(idOfShot)) {
@@ -65,7 +62,16 @@ public class ShotPopup extends DialogFragment {
                 else
                     Toast.makeText(getContext(), "Shot not deleted!", Toast.LENGTH_SHORT).show();
 
+                dismiss();*/
+
                 dismiss();
+
+                DeletePopup deletePopup = new DeletePopup();
+                Bundle args = new Bundle();
+                args.putString("ALL_OR_ONE", "one");
+                args.putString("ID", idOfShot);
+                deletePopup.setArguments(args);
+                deletePopup.show(getFragmentManager(), "Fragment");
             }
         });
 

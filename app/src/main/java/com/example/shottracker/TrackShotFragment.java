@@ -102,6 +102,8 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                     if(ballFlight == null)
                         ballFlight = "Straight";
 
+                    //addData(club, yards, ballFlight, tvNotes.getText().toString());
+
                     addData(club, 213.11, "Straight", tvNotes.getText().toString());
                     addData(club, 228.9, "Draw", tvNotes.getText().toString());
                     addData(club, 230.0, "Hook", tvNotes.getText().toString());
@@ -171,7 +173,8 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
 
             if(endingLatitude != 0.0 && endingLongitude != 0.0) {
                 yards = calculateDistance(startingLatitude, startingLongitude, endingLatitude, endingLongitude);
-                tvDistance.setText(String.format("%.1f \nyards", yards));
+                //tvDistance.setText(String.format("%.1f \nyards", yards));
+                displayYardage();
             }
         }
     }
@@ -195,8 +198,8 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
     }
 
     private void displayYardage(){
-        yards = 265.3;
-        avgDistance = 240;
+        yards = 260.3;
+        avgDistance = 260;
         red = 255;
         green = 0;
         String[] decimal = String.valueOf(yards).split("\\.");
@@ -262,18 +265,26 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                         green++;
 
                     red -= 1;
-                } else if(countingYards >= avgDistance * .9 && countingYards <= avgDistance) {
+                } else if(countingYards >= avgDistance * .9 && countingYards < avgDistance) {
                     //tvDistance.setTextColor(getResources().getColor(R.color.yellow, null));
-                    if(red > 180)
-                        red = 180;
+                    if(red > 160)
+                        red = 160;
+                    else if(red > 1)
+                        red -= 1;
 
-                    red -= 1;
-                } else if(countingYards > avgDistance && countingYards < avgDistance * 1.05) {
+                    if(green < 255)
+                        green++;
+                } else if(countingYards >= avgDistance && countingYards < avgDistance * 1.05) {
                     //tvDistance.setTextColor(getResources().getColor(R.color.yellowGreen, null));
-                    if(red > 130)
-                        red = 130;
+                    if(red > 110)
+                        red = 110;
+                    else if(red > 5)
+                        red -= 5;
 
-                    red -= 10;
+                    if(green < 255)
+                        green++;
+
+                    //red -= 10; // PUSH CHANGES TO GITHUB RIGHT AWAY. WITHOUT COMMITTING I THINK
                 } else if(countingYards >= avgDistance * 1.05) {
                     //tvDistance.setTextColor(getResources().getColor(R.color.green, null));
                     red = 64;
@@ -281,7 +292,7 @@ public class TrackShotFragment extends Fragment implements AdapterView.OnItemSel
                 }
 
                 tvDistance.setTextColor(Color.rgb(red, green, 0));
-                tvDistance.setText(countingYards + "." + countingTenthOfAYard + "\nyards");
+                tvDistance.setText(countingYards + "." + countingTenthOfAYard + " yards");
             }
         };
 

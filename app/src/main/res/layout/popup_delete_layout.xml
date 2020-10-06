@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="200dp" xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="300dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="300dp"
+            android:layout_height="175dp"
+            android:background="@drawable/popup_shot_background">
+
+        <TextView
+                android:text="@string/confirmDeletion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/tvDeleteTitle"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.1"
+                android:textSize="24sp" android:textStyle="bold"/>
+        <TextView
+                android:layout_width="248dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDeleteMessage"
+                android:gravity="center"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toBottomOf="@+id/tvDeleteTitle"
+                app:layout_constraintVertical_bias="0.13"/>
+        <Button
+                android:text="@string/yes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btnYes"
+                android:minHeight="40dp"
+                android:background="@drawable/button_background_red"
+                app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDeleteMessage"
+                app:layout_constraintHorizontal_bias="0.43"/>
+        <Button
+                android:text="@string/no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_background"
+                android:id="@+id/btnNo"
+                android:minHeight="40dp"
+                app:layout_constraintStart_toEndOf="@+id/btnYes" app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/btnYes" app:layout_constraintTop_toTopOf="@+id/btnYes"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
